@@ -11,13 +11,34 @@ interface PanelProps {
 
 export function Panel({ title, subtitle, actions, children, className = '', bodyClassName = 'p-4' }: PanelProps) {
   return (
-    <section className={`rounded-xl border border-navy-700 bg-navy-850 ${className}`}>
-      <header className="flex items-start justify-between gap-3 border-b border-navy-700 px-4 py-3">
+    <section
+      className={`rounded-xl border transition-all duration-200 ${className}`}
+      style={{
+        backgroundColor: 'var(--card-bg)',
+        borderColor: 'var(--card-border)',
+        boxShadow: 'var(--card-shadow)',
+        color: 'var(--card-text-body)',
+      }}
+    >
+      <header
+        className="flex items-start justify-between gap-3 border-b px-4 py-3"
+        style={{ borderColor: 'var(--card-header-border)' }}
+      >
         <div className="min-w-0">
-          <h2 className="text-[11px] font-bold uppercase tracking-[0.16em] text-steel-300">
+          <h2
+            className="text-[14px] font-bold uppercase tracking-[0.14em] font-cyber transition-colors"
+            style={{ color: 'var(--card-text-title)' }}
+          >
             {title}
           </h2>
-          {subtitle ? <p className="mt-0.5 text-[11px] text-steel-500">{subtitle}</p> : null}
+          {subtitle ? (
+            <p
+              className="mt-0.5 text-[12px] font-medium transition-colors"
+              style={{ color: 'var(--card-text-muted)' }}
+            >
+              {subtitle}
+            </p>
+          ) : null}
         </div>
         {actions}
       </header>

@@ -1,44 +1,44 @@
 import type { CrimeCategory, RiskLevel } from '../types'
 
 export const CRIME_CATEGORY_COLORS: Record<CrimeCategory, string> = {
-  Theft: '#38bdf8',
-  Robbery: '#f43f5e',
-  Assault: '#fb923c',
-  Burglary: '#a78bfa',
-  'Vehicle Theft': '#facc15',
-  Fraud: '#2dd4bf',
-  Other: '#94a3b8',
+  Theft: '#2c5282', // Classic Slate Navy
+  Robbery: '#8b263e', // Deep Madder Claret
+  Assault: '#b85d19', // Earthen Terracotta
+  Burglary: '#5d4b75', // Muted Amethyst Plum
+  'Vehicle Theft': '#9a782c', // Antique Muted Bronze
+  Fraud: '#2a6f78', // Pine Spruce Mineral
+  Other: '#64748b', // Neutral Slate Charcoal
 }
 
 export const RISK_LEVEL_COLORS: Record<RiskLevel, string> = {
-  Low: '#22c55e',
-  Medium: '#eab308',
-  High: '#f97316',
-  Critical: '#ef4444',
+  Low: '#2d6a4f', // Natural Forest Sage
+  Medium: '#b45309', // Warm Natural Ochre
+  High: '#c2410c', // Burnt Terracotta Rust
+  Critical: '#991b1b', // Deep Brick Crimson
 }
 
 export const STATUS_COLORS: Record<string, string> = {
-  Reported: '#38bdf8',
-  'Under Investigation': '#eab308',
-  Closed: '#22c55e',
-  Active: '#ef4444',
-  Monitoring: '#eab308',
-  Contained: '#22c55e',
-  Rising: '#ef4444',
-  Stable: '#eab308',
-  Declining: '#22c55e',
+  Reported: '#2c5282',
+  'Under Investigation': '#b45309',
+  Closed: '#2d6a4f',
+  Active: '#991b1b',
+  Monitoring: '#b45309',
+  Contained: '#2d6a4f',
+  Rising: '#991b1b',
+  Stable: '#b45309',
+  Declining: '#2d6a4f',
 }
 
 export function riskLevelClass(level: RiskLevel): string {
   switch (level) {
     case 'Low':
-      return 'border-risk-low/40 bg-risk-low/10 text-risk-low'
+      return 'border-[#2d6a4f]/40 bg-[#2d6a4f]/10 text-[#1b4d3e]'
     case 'Medium':
-      return 'border-risk-medium/40 bg-risk-medium/10 text-risk-medium'
+      return 'border-[#b45309]/40 bg-[#b45309]/10 text-[#92400e]'
     case 'High':
-      return 'border-risk-high/40 bg-risk-high/10 text-risk-high'
+      return 'border-[#c2410c]/40 bg-[#c2410c]/10 text-[#9a3412]'
     case 'Critical':
-      return 'border-risk-critical/40 bg-risk-critical/10 text-risk-critical'
+      return 'border-[#991b1b]/40 bg-[#991b1b]/10 text-[#7f1d1d]'
   }
 }
 

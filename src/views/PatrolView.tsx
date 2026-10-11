@@ -19,7 +19,7 @@ export function PatrolView({ dispatchPlan, zones, recommendations }: PatrolViewP
   const { units, running, speed, changeSpeed, toggleRunning, reset } = usePatrol()
 
   return (
-    <div className="scroll-thin flex h-full flex-col gap-3 overflow-y-auto bg-navy-950 p-3 pb-6 xl:p-4">
+    <div className="scroll-thin flex h-full flex-col gap-3 overflow-y-auto bg-transparent p-3 pb-6 xl:p-4">
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <h1 className="text-[18px] font-bold leading-tight text-white xl:text-[22px]">
@@ -67,24 +67,24 @@ export function PatrolView({ dispatchPlan, zones, recommendations }: PatrolViewP
               The unit pool is dealt round-robin across staffed recommendations, so every top-priority
               zone gets coverage before any zone gets a second unit.
             </p>
-            <ul className="mt-2 space-y-1.5">
+            <ul className="mt-2 space-y-1.5 font-serif">
               {recommendations.map((recommendation, index) => {
                 const zone = zones.find((entry) => entry.id === recommendation.zoneId)
                 if (!zone) return null
                 return (
                   <li
                     key={recommendation.zoneId}
-                    className="flex items-center justify-between gap-2 rounded-lg border border-navy-600 bg-navy-800 px-2.5 py-2"
+                    className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50/80 px-3 py-2 shadow-xs"
                   >
                     <div className="min-w-0">
-                      <span className="text-[10px] font-mono text-steel-500">#{index + 1}</span>
-                      <p className="truncate text-[12px] font-semibold text-white">{zone.area}</p>
-                      <p className="text-[10px] text-steel-500">
+                      <span className="text-[10px] font-mono text-slate-500 font-bold">#{index + 1}</span>
+                      <p className="truncate text-[13px] font-bold text-slate-900">{zone.area}</p>
+                      <p className="text-[11px] text-slate-600">
                         Risk {zone.riskScore}/100 · {recommendation.units} unit
                         {recommendation.units === 1 ? '' : 's'} · {recommendation.window}
                       </p>
                     </div>
-                    <span className="text-[10px] font-semibold text-blue-300">
+                    <span className="text-[11px] font-bold text-blue-700">
                       {recommendation.priority}
                     </span>
                   </li>
@@ -94,10 +94,10 @@ export function PatrolView({ dispatchPlan, zones, recommendations }: PatrolViewP
           </Panel>
 
           <Panel title="Simulation controls" subtitle="Demo only">
-            <div className="space-y-2.5">
-              <label className="flex items-center justify-between gap-2 text-[11px] text-steel-300">
+            <div className="space-y-2.5 font-serif">
+              <label className="flex items-center justify-between gap-2 text-[12px] text-slate-700 font-medium">
                 <span>Simulation speed (× realtime)</span>
-                <span className="font-mono text-[10px]">{speed.toFixed(1)}x</span>
+                <span className="font-mono text-[11px] font-bold text-slate-900">{speed.toFixed(1)}x</span>
               </label>
               <input
                 type="range"
@@ -106,9 +106,9 @@ export function PatrolView({ dispatchPlan, zones, recommendations }: PatrolViewP
                 step={0.25}
                 value={speed}
                 onChange={(event) => changeSpeed(Number(event.currentTarget.value))}
-                className="w-full accent-blue-500"
+                className="w-full accent-blue-600"
               />
-              <div className="flex flex-wrap gap-1.5 text-[10px] text-steel-500">
+              <div className="flex flex-wrap gap-2 text-[10px] text-slate-500 font-medium">
                 <span>0.25x</span>
                 <span>0.5x</span>
                 <span>1.0x</span>
@@ -116,7 +116,7 @@ export function PatrolView({ dispatchPlan, zones, recommendations }: PatrolViewP
                 <span>3.0x</span>
               </div>
             </div>
-            <p className="mt-2 text-[10px] leading-relaxed text-steel-600">
+            <p className="mt-2 text-[10px] leading-relaxed text-slate-500 font-serif border-t border-slate-100 pt-2">
               Units update at ~4 Hz to keep the animation smooth. Routes are synthetic and fixed to
               each assigned risk zone and its nearest station.
             </p>
@@ -124,25 +124,25 @@ export function PatrolView({ dispatchPlan, zones, recommendations }: PatrolViewP
 
           <Panel title="Live patrol units" subtitle={`${units.length} simulated units`}>
             {units.length === 0 ? (
-              <p className="text-[11px] text-steel-500">
+              <p className="text-[11px] text-slate-500 font-serif">
                 No units active yet. Start the simulation to see animated patrols on the map.
               </p>
             ) : (
-              <ul className="space-y-1.5">
+              <ul className="space-y-1.5 font-serif">
                 {units.map((unit) => (
                   <li
                     key={unit.id}
-                    className="flex items-start justify-between gap-2 rounded-lg border border-navy-600 bg-navy-800 px-2.5 py-2"
+                    className="flex items-start justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50/80 px-3 py-2 shadow-xs"
                   >
                     <div className="min-w-0">
-                      <p className="text-[12px] font-semibold text-white">{unit.callsign}</p>
-                      <p className="mt-0.5 flex items-center gap-1 text-[10px] text-steel-400">
-                        <MapPin className="size-3" />
+                      <p className="text-[13px] font-bold text-slate-900">{unit.callsign}</p>
+                      <p className="mt-0.5 flex items-center gap-1 text-[11px] text-slate-600">
+                        <MapPin className="size-3 text-blue-600" />
                         <span className="truncate">
                           {unit.zoneArea} · Base {unit.stationName}
                         </span>
                       </p>
-                      <p className="mt-0.5 text-[10px] text-steel-500">
+                      <p className="mt-0.5 text-[10px] text-slate-500">
                         Status: <span className="font-semibold">{unit.displayStatus}</span> · ETA{' '}
                         {unit.etaMinutes > 0 ? `${unit.etaMinutes} min` : 'On station'}
                       </p>

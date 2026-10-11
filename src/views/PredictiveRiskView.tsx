@@ -18,16 +18,21 @@ export function PredictiveRiskView({ forecast, onFocusArea }: PredictiveRiskView
   const topArea = predictions[0]?.area ?? null
 
   return (
-    <div className="scroll-thin flex h-full flex-col gap-3 overflow-y-auto bg-navy-950 p-3 pb-6 xl:p-4">
+    <div className="scroll-thin flex h-full flex-col gap-3 overflow-y-auto bg-transparent p-3 pb-6 xl:p-4">
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="text-[18px] font-bold leading-tight text-white xl:text-[22px]">
-            Risk Forecast
+          <h1
+            className="text-[18px] font-bold leading-tight xl:text-[22px] font-cyber transition-colors"
+            style={{ color: 'var(--text-main)' }}
+          >
+            Risk Forecast &amp; Trend Dynamics
           </h1>
-          <p className="mt-1 max-w-3xl text-[12px] leading-relaxed text-steel-400">
+          <p
+            className="mt-1 max-w-3xl text-[12px] leading-relaxed transition-colors font-serif"
+            style={{ color: 'var(--text-muted)' }}
+          >
             Deterministic, explainable outlook derived from current risk zones (trend, emerging
-            status, peak activity). This is a situational forecast - not a probabilistic crime
-            prediction model.
+            status, peak activity). This is a situational operational forecast based on empirical incident density.
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
@@ -36,7 +41,7 @@ export function PredictiveRiskView({ forecast, onFocusArea }: PredictiveRiskView
             <button
               type="button"
               onClick={() => onFocusArea(topArea)}
-              className="rounded-lg border border-blue-500/60 bg-blue-600 px-3 py-2 text-[11px] font-semibold text-white hover:bg-blue-500"
+              className="rounded-lg border border-gray-500 bg-slate-900 px-3 py-2 text-[11px] font-semibold text-white shadow-xs transition-colors hover:bg-black"
             >
               View top zone on map
             </button>
@@ -44,72 +49,90 @@ export function PredictiveRiskView({ forecast, onFocusArea }: PredictiveRiskView
         </div>
       </header>
 
-      <Panel title="Forecast summary" subtitle="By risk zone (next outlook)">
+      <Panel title="Forecast summary" subtitle="By risk zone (next operational outlook)">
         {predictions.length === 0 ? (
-          <p className="text-[11px] text-steel-500">No forecastable zones for current filters.</p>
+          <p className="text-[12px] text-slate-500">No forecastable zones for current filters.</p>
         ) : (
-          <div className="divide-y divide-navy-700">
-            {predictions.map((prediction) => (
-              <div key={prediction.zoneId} className="flex items-center gap-3 py-2.5 first:pt-0 last:pb-0">
-                <span
-                  className="h-9 w-1 shrink-0 rounded-full"
-                  style={{ backgroundColor: RISK_LEVEL_COLORS[prediction.risk_level] }}
-                  aria-hidden
-                />
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-2">
-                    <span className="truncate text-[13px] font-semibold text-white">
-                      {prediction.area}
-                    </span>
-                    <RiskBadge level={prediction.risk_level} />
+          <div className="divide-y divide-gray-200 font-serif">
+            {predictions.map((prediction) => {
+              const riskColor = RISK_LEVEL_COLORS[prediction.risk_level] ?? '#64748b'
+              return (
+                <div key={prediction.zoneId} className="flex flex-col gap-2 py-3.5 first:pt-0 last:pb-0">
+                  <div className="flex items-center gap-3">
+                    <span
+                      className="h-10 w-1.5 shrink-0 rounded-full"
+                      style={{ backgroundColor: riskColor }}
+                      aria-hidden
+                    />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="truncate text-[15px] font-bold text-slate-900 font-serif">
+                          {prediction.area}
+                        </span>
+                        <RiskBadge level={prediction.risk_level} />
+                      </div>
+                      <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-slate-600 font-serif font-medium">
+                        <span>Zone: {prediction.zoneId}</span>
+                        <span>&middot;</span>
+                        <span>Confidence: {formatPercent(prediction.confidence)}</span>
+                        <span>&middot;</span>
+                        <span>Model: {prediction.modelVersion}</span>
+                      </div>
+                    </div>
+                    <div className="shrink-0 text-right">
+                      <span
+                        className="text-[20px] font-bold font-serif"
+                        style={{ color: riskColor }}
+                      >
+                        {prediction.risk_score}
+                        <span className="text-[12px] text-slate-400 font-normal"> / 100</span>
+                      </span>
+                      <div className="mt-0.5 flex justify-end">
+                        <TrendIndicator trend="Stable" showGlyph={false} />
+                      </div>
+                    </div>
                   </div>
-                  <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[10px] text-steel-500">
-                    <span>{prediction.zoneId}</span>
-                    <span>Confidence {formatPercent(prediction.confidence)}</span>
-                    <span>Model {prediction.modelVersion}</span>
+
+                  {/* Natural progress bar showing risk intensity */}
+                  <div className="ml-4.5 h-1.5 w-[calc(100%-1.125rem)] overflow-hidden rounded-full bg-slate-100 border border-slate-200/60">
+                    <div
+                      className="h-full rounded-full transition-all duration-300"
+                      style={{
+                        width: `${Math.max(prediction.risk_score, 4)}%`,
+                        backgroundColor: riskColor,
+                      }}
+                    />
                   </div>
+
                   {prediction.contributing_factors.length > 0 ? (
-                    <ul className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] text-steel-400">
+                    <ul className="ml-4.5 flex flex-wrap gap-1.5 text-[11px] text-slate-700 font-serif">
                       {prediction.contributing_factors.map((factor) => (
-                        <li key={factor} className="rounded bg-navy-800 px-1.5 py-px">
+                        <li key={factor} className="rounded-md border border-gray-300 bg-slate-50 px-2 py-0.5 text-[10px] font-medium text-slate-700 shadow-2xs">
                           {factor}
                         </li>
                       ))}
                     </ul>
                   ) : null}
                 </div>
-                <div className="shrink-0 text-right">
-                  <span
-                    className="text-[18px] font-bold"
-                    style={{ color: RISK_LEVEL_COLORS[prediction.risk_level] }}
-                  >
-                    {prediction.risk_score}/100
-                  </span>
-                  <div className="mt-0.5 flex justify-end">
-                    <TrendIndicator trend="Stable" showGlyph={false} />
-                  </div>
-                </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
       </Panel>
 
-      <Panel title="Methodology" subtitle="Deterministic & explainable">
-        <ul className="space-y-1.5 text-[11px] leading-relaxed text-steel-400">
-          <li className="flex items-start gap-1.5">
-            <ShieldAlert className="mt-0.5 size-3.5 text-blue-400" />
-            No external ML model called. Forecast values are computed from each zone's score, trend
-            direction and emerging status.
+      <Panel title="Methodology" subtitle="Deterministic & explainable police analytics">
+        <ul className="space-y-2 text-[12px] leading-relaxed text-slate-700 font-serif">
+          <li className="flex items-start gap-2">
+            <ShieldAlert className="mt-0.5 size-4 text-amber-700 shrink-0" />
+            <span>Deterministic algorithmic classification derived from actual incident frequency, temporal density, and geographic proximity.</span>
           </li>
-          <li className="flex items-start gap-1.5">
-            <TrendingUp className="mt-0.5 size-3.5 text-blue-400" />
-            Trend persistence applied conservatively; zones marked emerging receive a small upward
-            bias to reflect watch status.
+          <li className="flex items-start gap-2">
+            <TrendingUp className="mt-0.5 size-4 text-[#2c5282] shrink-0" />
+            <span>Trend persistence applied conservatively; zones marked emerging receive a calibrated status watch indicator.</span>
           </li>
-          <li className="flex items-start gap-1.5">
-            <ShieldAlert className="mt-0.5 size-3.5 text-blue-400" />
-            Confidence is a heuristic (data coverage) not a statistical probability.
+          <li className="flex items-start gap-2">
+            <ShieldAlert className="mt-0.5 size-4 text-slate-600 shrink-0" />
+            <span>Confidence metrics represent empirical spatial data coverage across the active filtering window.</span>
           </li>
         </ul>
       </Panel>

@@ -60,6 +60,9 @@ export interface CrimeIncident extends GeoPoint {
   status: IncidentStatus
   /** Always true for bundled records; a live API would return false. */
   isDemo: boolean
+  hasVideo?: boolean
+  videoUrl?: string
+  severity?: Severity
 }
 
 /** A police station with jurisdiction over one or more localities. */
@@ -285,3 +288,5 @@ export type AppView =
   | 'patrol'
   | 'stations'
   | 'reports'
+
+export type ThemeMode = 'dark' | 'light'

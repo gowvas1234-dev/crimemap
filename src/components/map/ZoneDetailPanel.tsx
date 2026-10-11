@@ -23,18 +23,41 @@ export function ZoneDetailPanel({
 }: ZoneDetailPanelProps) {
   return (
     <aside
-      className="pointer-events-auto scroll-thin absolute inset-x-2 bottom-2 z-[1200] max-h-[58vh] overflow-y-auto rounded-xl border border-navy-600 bg-navy-900/97 shadow-[0_18px_50px_rgba(0,0,0,0.6)] backdrop-blur-sm xl:inset-x-auto xl:bottom-3 xl:right-3 xl:top-3 xl:max-h-none xl:w-[350px]"
+      className="pointer-events-auto scroll-thin absolute inset-x-2 bottom-2 z-[1200] max-h-[58vh] overflow-y-auto rounded-xl border xl:inset-x-auto xl:bottom-3 xl:right-3 xl:top-3 xl:max-h-none xl:w-[360px] font-serif transition-all"
+      style={{
+        backgroundColor: 'var(--card-bg)',
+        borderColor: 'var(--card-border)',
+        boxShadow: 'var(--card-shadow)',
+        color: 'var(--card-text-body)',
+      }}
       aria-label={`Risk analysis for ${zone.area}`}
     >
-      <header className="sticky top-0 z-10 flex items-start justify-between gap-2 border-b border-navy-700 bg-navy-900/97 px-3 py-2.5 backdrop-blur">
+      <header
+        className="sticky top-0 z-10 flex items-start justify-between gap-2 border-b px-4 py-3 backdrop-blur font-serif transition-colors"
+        style={{
+          backgroundColor: 'var(--card-bg)',
+          borderColor: 'var(--card-header-border)',
+        }}
+      >
         <div className="min-w-0">
-          <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-steel-500">
+          <p
+            className="text-[10px] font-bold uppercase tracking-[0.14em] font-cyber transition-colors"
+            style={{ color: 'var(--card-text-title)' }}
+          >
             Zone analysis · {zone.id}
           </p>
-          <h2 className="truncate text-[14px] font-semibold text-white">{zone.area}</h2>
+          <h2
+            className="truncate text-[15px] font-bold font-cyber transition-colors"
+            style={{ color: 'var(--card-text-title)' }}
+          >
+            {zone.area}
+          </h2>
           <div className="mt-1 flex flex-wrap items-center gap-2">
             <TrendIndicator trend={zone.trend} percent={zone.trendPercent} />
-            <span className="text-[10px] text-steel-500">
+            <span
+              className="text-[11px] font-serif transition-colors"
+              style={{ color: 'var(--card-text-muted)' }}
+            >
               {zone.crimeCount} incidents · {zone.dominantCrime}
             </span>
             <DemoChip compact />
@@ -44,41 +67,41 @@ export function ZoneDetailPanel({
           type="button"
           onClick={onClose}
           aria-label="Close zone analysis"
-          className="shrink-0 rounded p-1 text-steel-400 hover:bg-navy-700 hover:text-white"
+          className="shrink-0 rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
         >
           <X className="size-4" />
         </button>
       </header>
 
-      <div className="flex flex-col gap-3 p-3">
+      <div className="flex flex-col gap-3 p-3 font-serif">
         <RiskBreakdown zone={zone} title={`Why is ${zone.area} high risk?`} />
 
         {recommendation ? <RecommendationCard recommendation={recommendation} /> : null}
 
-        <div className="grid grid-cols-2 gap-2 text-[10px]">
-          <div className="rounded-lg border border-navy-600 bg-navy-800 px-2.5 py-2">
-            <p className="font-bold uppercase tracking-[0.12em] text-steel-500">Peak time</p>
-            <p className="mt-0.5 text-[12px] font-semibold text-steel-100">{zone.peakWindow}</p>
-            <p className="text-steel-500">{zone.peakShare}% of incidents</p>
+        <div className="grid grid-cols-2 gap-2 text-[11px] font-serif">
+          <div className="rounded-lg border border-slate-200 bg-slate-50/80 px-2.5 py-2 shadow-xs">
+            <p className="font-bold uppercase tracking-[0.12em] text-slate-500 text-[10px]">Peak time</p>
+            <p className="mt-0.5 text-[12px] font-bold text-slate-900">{zone.peakWindow}</p>
+            <p className="text-slate-500">{zone.peakShare}% of incidents</p>
           </div>
-          <div className="rounded-lg border border-navy-600 bg-navy-800 px-2.5 py-2">
-            <p className="font-bold uppercase tracking-[0.12em] text-steel-500">Repeat spots</p>
-            <p className="mt-0.5 text-[12px] font-semibold text-steel-100">{zone.repeatShare}%</p>
-            <p className="text-steel-500">within 250 m</p>
+          <div className="rounded-lg border border-slate-200 bg-slate-50/80 px-2.5 py-2 shadow-xs">
+            <p className="font-bold uppercase tracking-[0.12em] text-slate-500 text-[10px]">Repeat spots</p>
+            <p className="mt-0.5 text-[12px] font-bold text-slate-900">{zone.repeatShare}%</p>
+            <p className="text-slate-500">within 250 m</p>
           </div>
-          <div className="rounded-lg border border-navy-600 bg-navy-800 px-2.5 py-2">
-            <p className="font-bold uppercase tracking-[0.12em] text-steel-500">Previous window</p>
-            <p className="mt-0.5 text-[12px] font-semibold text-steel-100">
+          <div className="rounded-lg border border-slate-200 bg-slate-50/80 px-2.5 py-2 shadow-xs">
+            <p className="font-bold uppercase tracking-[0.12em] text-slate-500 text-[10px]">Previous window</p>
+            <p className="mt-0.5 text-[12px] font-bold text-slate-900">
               {zone.previousCount} incidents
             </p>
-            <p className="text-steel-500">now {zone.crimeCount}</p>
+            <p className="text-slate-500">now {zone.crimeCount}</p>
           </div>
-          <div className="rounded-lg border border-navy-600 bg-navy-800 px-2.5 py-2">
-            <p className="font-bold uppercase tracking-[0.12em] text-steel-500">Nearby activity</p>
-            <p className="mt-0.5 text-[12px] font-semibold text-steel-100">
+          <div className="rounded-lg border border-slate-200 bg-slate-50/80 px-2.5 py-2 shadow-xs">
+            <p className="font-bold uppercase tracking-[0.12em] text-slate-500 text-[10px]">Nearby activity</p>
+            <p className="mt-0.5 text-[12px] font-bold text-slate-900">
               {zone.nearbyCount} incidents
             </p>
-            <p className="text-steel-500">within 3 km</p>
+            <p className="text-slate-500">within 3 km</p>
           </div>
         </div>
 

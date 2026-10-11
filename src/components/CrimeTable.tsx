@@ -23,22 +23,22 @@ export function CrimeTable({ incidents, maxRows = 8 }: CrimeTableProps) {
           <button
             type="button"
             onClick={() => setExpanded((value) => !value)}
-            className="text-[10px] font-semibold uppercase tracking-[0.1em] text-blue-400 hover:text-blue-300"
+            className="text-[11px] font-bold uppercase tracking-[0.1em] text-slate-700 hover:text-black font-serif"
           >
             {expanded ? 'Show less' : `Show all ${formatNumber(incidents.length)}`}
           </button>
         ) : null
       }
     >
-      <div className="space-y-2 md:hidden">
+      <div className="space-y-2 md:hidden font-serif">
         {rows.map((incident) => (
           <div
             key={incident.id}
-            className="rounded-lg border border-navy-700 bg-navy-800/60 p-3"
+            className="rounded-lg border border-slate-200 bg-slate-50/80 p-3 shadow-xs"
           >
             <div className="flex items-start justify-between gap-2">
-              <span className="font-mono text-[10px] text-steel-400">{incident.id}</span>
-              <span className="shrink-0 text-[10px] text-steel-500">
+              <span className="font-mono text-[10px] text-slate-500 font-semibold">{incident.id}</span>
+              <span className="shrink-0 text-[10px] text-slate-500">
                 {formatDateTime(incident.occurredAt)}
               </span>
             </div>
@@ -46,26 +46,26 @@ export function CrimeTable({ incidents, maxRows = 8 }: CrimeTableProps) {
               <CategoryBadge category={incident.category} />
               <StatusBadge status={incident.status} />
             </div>
-            <p className="mt-1.5 text-[12px] font-semibold text-steel-100">{incident.area}</p>
-            <p className="mt-0.5 text-[11px] leading-snug text-steel-400">
+            <p className="mt-1.5 text-[13px] font-bold text-slate-900">{incident.area}</p>
+            <p className="mt-0.5 text-[11px] leading-snug text-slate-600">
               {incident.description}
             </p>
-            <p className="mt-1 font-mono text-[10px] text-steel-500">
+            <p className="mt-1 font-mono text-[10px] text-slate-500">
               {incident.lat.toFixed(4)}, {incident.lng.toFixed(4)}
             </p>
           </div>
         ))}
         {rows.length === 0 ? (
-          <p className="py-4 text-center text-[11px] text-steel-500">
+          <p className="py-4 text-center text-[11px] text-slate-500">
             No incidents match the current filters.
           </p>
         ) : null}
       </div>
 
-      <div className="hidden overflow-x-auto md:block">
-        <table className="w-full min-w-[920px] text-[11px]">
+      <div className="hidden overflow-x-auto md:block font-serif">
+        <table className="w-full min-w-[920px] text-[12px]">
           <thead>
-            <tr className="border-b border-navy-700 text-left text-[9px] uppercase tracking-[0.14em] text-steel-500">
+            <tr className="border-b border-slate-200 text-left text-[10px] uppercase tracking-[0.12em] text-slate-500">
               <th className="px-4 py-2">Incident ID</th>
               <th className="px-4 py-2">Occurred</th>
               <th className="px-4 py-2">Area</th>
@@ -77,27 +77,27 @@ export function CrimeTable({ incidents, maxRows = 8 }: CrimeTableProps) {
           </thead>
           <tbody>
             {rows.map((incident) => (
-              <tr key={incident.id} className="border-b border-navy-700/60 hover:bg-navy-800/40">
-                <td className="px-4 py-1.5 font-mono text-[10px] text-steel-400">{incident.id}</td>
-                <td className="px-4 py-1.5 text-steel-200">{formatDateTime(incident.occurredAt)}</td>
-                <td className="px-4 py-1.5 text-steel-200">{incident.area}</td>
-                <td className="px-4 py-1.5">
+              <tr key={incident.id} className="border-b border-slate-100 hover:bg-slate-50/70">
+                <td className="px-4 py-2 font-mono text-[10px] text-slate-600 font-bold">{incident.id}</td>
+                <td className="px-4 py-2 text-slate-800">{formatDateTime(incident.occurredAt)}</td>
+                <td className="px-4 py-2 font-bold text-slate-900">{incident.area}</td>
+                <td className="px-4 py-2">
                   <CategoryBadge category={incident.category} />
                 </td>
-                <td className="px-4 py-1.5">
+                <td className="px-4 py-2">
                   <StatusBadge status={incident.status} />
                 </td>
-                <td className="max-w-[360px] truncate px-4 py-1.5 text-steel-400">
+                <td className="max-w-[360px] truncate px-4 py-2 text-slate-600">
                   {incident.description}
                 </td>
-                <td className="px-4 py-1.5 font-mono text-[10px] text-steel-500">
+                <td className="px-4 py-2 font-mono text-[10px] text-slate-500">
                   {incident.lat.toFixed(4)}, {incident.lng.toFixed(4)}
                 </td>
               </tr>
             ))}
             {rows.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-4 py-4 text-center text-[11px] text-steel-500">
+                <td colSpan={7} className="px-4 py-4 text-center text-[11px] text-slate-500">
                   No incidents match the current filters.
                 </td>
               </tr>
@@ -105,7 +105,7 @@ export function CrimeTable({ incidents, maxRows = 8 }: CrimeTableProps) {
           </tbody>
         </table>
       </div>
-      <div className="border-t border-navy-700 px-4 py-2 text-[10px] text-steel-500">
+      <div className="border-t border-slate-100 px-4 py-2 text-[10px] text-slate-500 font-serif">
         <DemoChip compact /> Synthetic rows only - not a record of live police calls.
       </div>
     </Panel>

@@ -1,4 +1,4 @@
-﻿import { CategoryChart, TrendsChart } from '../components/Charts'
+import { CategoryChart, TrendsChart } from '../components/Charts'
 import { Panel } from '../components/ui/Panel'
 import { DemoChip } from '../components/ui/Badge'
 import type { AreaStat, CategoryStat, DashboardStats, MonthPoint, RiskLevel } from '../types'
@@ -14,47 +14,97 @@ interface TrendsViewProps {
 }
 
 export function TrendsView({ monthly, categoryStats, areaStats, statusStats, zoneRiskCounts }: TrendsViewProps) {
+  const maxArea = Math.max(1, ...areaStats.map((item) => item.count))
+  const maxStatus = Math.max(1, ...statusStats.map((item) => item.count))
+  const maxZoneRisk = Math.max(1, ...Object.values(zoneRiskCounts))
+
   return (
     <div className="flex flex-col gap-3 p-3 pb-6 xl:p-4">
       <div className="grid gap-3 lg:grid-cols-2 lg:gap-4">
         <TrendsChart data={monthly} />
         <CategoryChart data={categoryStats} />
       </div>
-      <div className="grid gap-3 lg:grid-cols-3 lg:gap-4">
+      <div className="grid gap-3 lg:grid-cols-3 lg:gap-4 font-serif">
         <Panel title="Top areas" subtitle="Filtered demo incidents by locality">
-          <div className="space-y-1.5">
-            {areaStats.map((area) => (
-              <div key={area.area} className="flex items-center justify-between gap-3 text-[11px]">
-                <span className="truncate text-steel-200">{area.area}</span>
-                <span className="font-mono text-[10px] text-steel-400">{area.count}</span>
-              </div>
-            ))}
-            {areaStats.length === 0 ? <p className="text-[11px] text-steel-500">No areas</p> : null}
+          <div className="space-y-2">
+            {areaStats.map((area) => {
+              const width = (area.count / maxArea) * 100
+              return (
+                <div key={area.area} className="space-y-1">
+                  <div className="flex items-center justify-between gap-3 text-[12px]">
+                    <span className="truncate text-slate-800 font-semibold">{area.area}</span>
+                    <span className="font-mono text-[11px] text-slate-900 font-bold">{area.count}</span>
+                  </div>
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 border border-slate-200/60">
+                    <div
+                      className="h-full rounded-full transition-all duration-300"
+                      style={{ width: `${Math.max(width, 3)}%`, backgroundColor: '#2c5282' }}
+                    />
+                  </div>
+                </div>
+              )
+            })}
+            {areaStats.length === 0 ? <p className="text-[11px] text-slate-400">No areas found</p> : null}
           </div>
         </Panel>
+
         <Panel title="Incident status" subtitle="Resolution mix for filtered demo set">
-          <div className="space-y-1.5">
-            {statusStats.map((item) => (
-              <div key={item.status} className="flex items-center justify-between gap-3 text-[11px]">
-                <span className="text-steel-200">{item.status}</span>
-                <span className="font-mono text-[10px] text-steel-400">{item.count}</span>
-              </div>
-            ))}
+          <div className="space-y-2">
+            {statusStats.map((item) => {
+              const width = (item.count / maxStatus) * 100
+              const statusColor =
+                item.status === 'Closed'
+                  ? '#2d6a4f' // Forest Sage
+                  : item.status === 'Under Investigation'
+                  ? '#b45309' // Warm Ochre
+                  : '#2c5282' // Slate Navy
+              return (
+                <div key={item.status} className="space-y-1">
+                  <div className="flex items-center justify-between gap-3 text-[12px]">
+                    <span className="text-slate-800 font-semibold flex items-center gap-1.5">
+                      <span className="size-2 rounded-full" style={{ backgroundColor: statusColor }} />
+                      {item.status}
+                    </span>
+                    <span className="font-mono text-[11px] text-slate-900 font-bold">{item.count}</span>
+                  </div>
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 border border-slate-200/60">
+                    <div
+                      className="h-full rounded-full transition-all duration-300"
+                      style={{ width: `${Math.max(width, 3)}%`, backgroundColor: statusColor }}
+                    />
+                  </div>
+                </div>
+              )
+            })}
           </div>
         </Panel>
+
         <Panel title="Risk zone profile" subtitle="Detected zones by risk level">
-          <div className="space-y-1.5">
-            {Object.entries(zoneRiskCounts).map(([level, count]) => (
-              <div key={level} className="flex items-center justify-between gap-3 text-[11px]">
-                <span className="inline-flex items-center gap-2 text-steel-200">
-                  <span className="size-2.5 rounded-full" style={{ backgroundColor: RISK_LEVEL_COLORS[level as RiskLevel] }} />
-                  {level}
-                </span>
-                <span className="font-mono text-[10px] text-steel-400">{count}</span>
-              </div>
-            ))}
+          <div className="space-y-2">
+            {Object.entries(zoneRiskCounts).map(([level, count]) => {
+              const width = (count / maxZoneRisk) * 100
+              const color = RISK_LEVEL_COLORS[level as RiskLevel] ?? '#64748b'
+              return (
+                <div key={level} className="space-y-1">
+                  <div className="flex items-center justify-between gap-3 text-[12px]">
+                    <span className="inline-flex items-center gap-1.5 text-slate-800 font-semibold">
+                      <span className="size-2.5 rounded-full" style={{ backgroundColor: color }} />
+                      {level}
+                    </span>
+                    <span className="font-mono text-[11px] text-slate-900 font-bold">{count} zones</span>
+                  </div>
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 border border-slate-200/60">
+                    <div
+                      className="h-full rounded-full transition-all duration-300"
+                      style={{ width: `${Math.max(width, 3)}%`, backgroundColor: color }}
+                    />
+                  </div>
+                </div>
+              )
+            })}
           </div>
-          <div className="mt-3 text-[10px] text-steel-500">
+          <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500 border-t border-gray-200 pt-2">
+            <span>Dynamic Risk Classifier</span>
             <DemoChip compact />
           </div>
         </Panel>

@@ -16,17 +16,33 @@ export function RiskBreakdown({ zone, title, compact = false }: RiskBreakdownPro
   const color = RISK_LEVEL_COLORS[zone.riskLevel]
 
   return (
-    <div className="rounded-lg border border-navy-600 bg-navy-800/70 p-3">
+    <div
+      className="rounded-xl border p-3 font-serif transition-all duration-200"
+      style={{
+        backgroundColor: 'var(--card-bg)',
+        borderColor: 'var(--card-border)',
+        boxShadow: 'var(--card-shadow)',
+        color: 'var(--card-text-body)',
+      }}
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <p className="text-[9px] font-bold uppercase tracking-[0.16em] text-steel-500">
+          <p
+            className="text-[10px] font-bold uppercase tracking-[0.14em] font-cyber transition-colors"
+            style={{ color: 'var(--card-text-title)' }}
+          >
             {title ?? `Why is ${zone.area} at risk?`}
           </p>
           <div className="mt-1 flex items-baseline gap-2">
             <span className="text-3xl font-bold leading-none" style={{ color }}>
               {zone.riskScore}
             </span>
-            <span className="text-[12px] text-steel-400">/ 100</span>
+            <span
+              className="text-[12px] transition-colors"
+              style={{ color: 'var(--card-text-muted)' }}
+            >
+              / 100
+            </span>
             <RiskBadge level={zone.riskLevel} />
           </div>
         </div>
@@ -52,27 +68,58 @@ export function RiskBreakdown({ zone, title, compact = false }: RiskBreakdownPro
           const width = Math.max(0, Math.min(100, (component.points / component.max) * 100))
           return (
             <li key={component.key}>
-              <div className="flex items-baseline justify-between gap-2 text-[11px]">
-                <span className="truncate text-steel-200">{component.label}</span>
-                <span className="shrink-0 font-mono text-[10px] font-semibold text-steel-300">
+              <div className="flex items-baseline justify-between gap-2 text-[13px]">
+                <span
+                  className="truncate font-semibold transition-colors"
+                  style={{ color: 'var(--card-text-body)' }}
+                >
+                  {component.label}
+                </span>
+                <span
+                  className="shrink-0 font-mono text-[11px] font-bold transition-colors"
+                  style={{ color: 'var(--card-text-title)' }}
+                >
                   +{component.points} / {component.max}
                 </span>
               </div>
-              <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-navy-700">
+              <div
+                className="mt-1 h-2 w-full overflow-hidden rounded-full border transition-colors"
+                style={{
+                  backgroundColor: 'var(--card-subtle-bg)',
+                  borderColor: 'var(--card-subtle-border)',
+                }}
+              >
                 <div
                   className="h-full rounded-full transition-[width] duration-300"
                   style={{ width: `${width}%`, backgroundColor: color }}
                 />
               </div>
-              <p className="mt-0.5 text-[10px] leading-snug text-steel-500">{component.detail}</p>
+              <p
+                className="mt-0.5 text-[10px] leading-snug transition-colors"
+                style={{ color: 'var(--card-text-muted)' }}
+              >
+                {component.detail}
+              </p>
             </li>
           )
         })}
       </ul>
 
-      <p className="mt-3 border-t border-navy-700 pt-2 text-[10px] leading-relaxed text-steel-600">
-        Overall risk: <span className="font-semibold text-steel-300">{zone.riskScore} / 100 — {zone.riskLevel}</span>.
-        The score is the weighted sum of the six measurements above - same data, same score.
+      <p
+        className="mt-3 border-t pt-2 text-[10px] leading-relaxed transition-colors"
+        style={{
+          borderColor: 'var(--card-header-border)',
+          color: 'var(--card-text-muted)',
+        }}
+      >
+        Overall risk:{' '}
+        <span
+          className="font-semibold transition-colors"
+          style={{ color: 'var(--card-text-title)' }}
+        >
+          {zone.riskScore} / 100 — {zone.riskLevel}
+        </span>
+        . The score is the weighted sum of the six measurements above - same data, same score.
       </p>
     </div>
   )

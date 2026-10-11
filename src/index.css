@@ -1,59 +1,129 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-sans: 'Inter', 'Segoe UI', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'SFMono-Regular', ui-monospace, Menlo, monospace;
+  --font-sans: 'Public Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-serif: 'Public Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-cyber: 'Public Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SFMono-Regular', 'Consolas', monospace;
 
-  --color-navy-950: #050a14;
-  --color-navy-900: #0a1120;
-  --color-navy-850: #0d1526;
-  --color-navy-800: #111c31;
-  --color-navy-700: #1a2740;
-  --color-navy-600: #24344f;
-  --color-navy-500: #344a6e;
+  /* Deep Police Navy Palette (matching Territory Data Box) */
+  --color-navy-950: #050c18;
+  --color-navy-900: #081220;
+  --color-navy-850: #0b1a30;
+  --color-navy-800: #0f1d33;
+  --color-navy-700: #1e293b;
+  --color-navy-600: #334155;
+  --color-navy-500: #475569;
 
-  --color-steel-100: #e2e8f0;
-  --color-steel-200: #cbd5e1;
-  --color-steel-300: #94a3b8;
-  --color-steel-400: #64748b;
-  --color-steel-500: #475569;
-  --color-steel-600: #334155;
+  --color-khaki-950: #050c18;
+  --color-khaki-900: #081220;
+  --color-khaki-850: #0b1a30;
+  --color-khaki-800: #0f1d33;
+  --color-khaki-700: #1e293b;
+  --color-khaki-600: #334155;
+  --color-khaki-500: #475569;
+  --color-khaki-400: #64748b;
+  --color-khaki-300: #94a3b8;
+  --color-khaki-200: #cbd5e1;
+  --color-khaki-100: #f1f5f9;
 
-  --color-risk-low: #22c55e;
-  --color-risk-medium: #eab308;
-  --color-risk-high: #f97316;
-  --color-risk-critical: #ef4444;
+  --color-steel-100: #f8fafc;
+  --color-steel-200: #e2d5c3;
+  --color-steel-300: #cbd5e1;
+  --color-steel-400: #94a3b8;
+  --color-steel-500: #64748b;
+  --color-steel-600: #475569;
 
-  --color-signal-blue: #3b82f6;
-  --color-signal-cyan: #22d3ee;
+  --color-risk-low: #15803d;
+  --color-risk-medium: #b45309;
+  --color-risk-high: #c2410c;
+  --color-risk-critical: #b91c1c;
 
-  /* Force the mobile layout at every viewport width by disabling the
-     responsive breakpoints (sm/md/lg/xl/2xl can never match). */
-  --breakpoint-sm: 100000px;
-  --breakpoint-md: 100000px;
-  --breakpoint-lg: 100000px;
-  --breakpoint-xl: 100000px;
-  --breakpoint-2xl: 100000px;
+  --color-signal-blue: #1d4ed8;
+  --color-signal-cyan: #0284c7;
 }
 
 :root {
   color-scheme: dark;
+  --bg-app: #081220;
+  --bg-shell: rgba(11, 26, 48, 0.94);
+  --border-shell: #1e293b;
+  --bg-nav: rgba(8, 18, 32, 0.98);
+  --border-nav: #1e293b;
+  --text-main: #ffffff;
+  --text-muted: #94a3b8;
+  --header-bg: rgba(8, 18, 32, 0.98);
+  --header-border: #1e293b;
+  --emblem-opacity: 0.12;
+  --watermark-glow-1: rgba(30, 64, 175, 0.14);
+  --watermark-glow-2: rgba(234, 179, 8, 0.08);
+
+  /* White Boxes with Clean Gray Borders (Exact Match to Territory Data Cards) */
+  --card-bg: #ffffff;
+  --card-border: #9ca3af;
+  --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.18), 0 1px 3px rgba(0, 0, 0, 0.12);
+  --card-header-border: #d1d5db;
+  --card-text-title: #0f172a;
+  --card-text-body: #1e293b;
+  --card-text-muted: #64748b;
+  --card-subtle-bg: #f8fafc;
+  --card-subtle-border: #cbd5e1;
+}
+
+html.theme-light,
+body.theme-light,
+.theme-light {
+  color-scheme: light;
+  --bg-app: #f1f5f9;
+  --bg-shell: rgba(255, 255, 255, 0.94);
+  --border-shell: #cbd5e1;
+  --bg-nav: rgba(11, 26, 48, 0.98);
+  --border-nav: #1e293b;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --header-bg: rgba(11, 26, 48, 0.98);
+  --header-border: #1e293b;
+  --emblem-opacity: 0.14;
+  --watermark-glow-1: rgba(30, 64, 175, 0.08);
+  --watermark-glow-2: rgba(234, 179, 8, 0.06);
+
+  /* White Boxes with Clean Gray Borders (Light Mode) */
+  --card-bg: #ffffff;
+  --card-border: #9ca3af;
+  --card-shadow: 0 4px 14px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
+  --card-header-border: #e2e8f0;
+  --card-text-title: #0f172a;
+  --card-text-body: #1e293b;
+  --card-text-muted: #64748b;
+  --card-subtle-bg: #f8fafc;
+  --card-subtle-border: #cbd5e1;
 }
 
 html,
 body,
 #root {
   height: 100%;
+  font-family: 'Public Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  letter-spacing: -0.01em;
 }
 
 body {
   margin: 0;
-  background-color: var(--color-navy-950);
-  color: var(--color-steel-100);
-  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  font-family: 'Public Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
   -webkit-tap-highlight-color: transparent;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+button, input, select, textarea {
+  font-family: inherit;
 }
 
 /* Keep the app clear of notches/rounded corners on mobile devices. */
@@ -95,32 +165,36 @@ body {
 /* ------------------------------------------------------------------ */
 
 .leaflet-container {
-  background: #0a1120;
+  position: absolute !important;
+  inset: 0 !important;
+  height: 100% !important;
+  width: 100% !important;
+  background: #1b1610;
   font-family: var(--font-sans);
   outline: none;
 }
 
 .leaflet-control-zoom a {
-  background-color: #111c31 !important;
-  border-color: #24344f !important;
-  color: #cbd5e1 !important;
+  background-color: #2b231a !important;
+  border-color: #5c4d3a !important;
+  color: #eee5d8 !important;
 }
 
 .leaflet-control-zoom a:hover {
-  background-color: #1a2740 !important;
+  background-color: #493d2e !important;
   color: #ffffff !important;
 }
 
 .leaflet-control-zoom,
 .leaflet-control-layers {
-  border: 1px solid #24344f !important;
+  border: 1px solid #5c4d3a !important;
   border-radius: 8px !important;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
 }
 
 .leaflet-control-layers {
-  background: #111c31 !important;
+  background: #2b231a !important;
   color: #cbd5e1;
   font-size: 16px;
 }
@@ -378,54 +452,7 @@ body {
 }
 
 /* ------------------------------------------------------------------ */
-/* Global readable text scale                                          */
-/* Lift every text utility into a legible 16-19px band across the app. */
-/* Unlayered, so it wins over Tailwind's @layer utilities.             */
-/* ------------------------------------------------------------------ */
 
-/* Compact top disclaimer — deliberately below the 16px floor. */
-.demo-banner {
-  font-size: 11px;
-  line-height: 1.35;
-}
-
-.demo-banner-note {
-  font-size: 10px;
-}
-
-.text-\[7px\],
-.text-\[9px\],
-.text-\[10px\],
-.text-\[11px\],
-.text-\[12px\],
-.text-\[13px\],
-.text-\[14px\],
-.text-\[15px\],
-.text-\[16px\] {
-  font-size: 16px;
-}
-
-.text-\[17px\] {
-  font-size: 17px;
-}
-
-.text-\[18px\] {
-  font-size: 18px;
-}
-
-.text-\[22px\] {
-  font-size: 19px;
-}
-
-.text-xl {
-  font-size: 19px;
-  line-height: 1.3;
-}
-
-.text-3xl {
-  font-size: 19px;
-  line-height: 1.3;
-}
 
 /* Google-Maps-style bottom sheet slide-up */
 @keyframes sheet-in {
@@ -440,3 +467,58 @@ body {
 .incident-sheet-in {
   animation: sheet-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+@keyframes scan {
+  0% {
+    top: -15%;
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    top: 115%;
+    opacity: 0;
+  }
+}
+
+@keyframes recBlink {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.25;
+    transform: scale(0.85);
+  }
+}
+
+@keyframes zonePulse {
+  0% {
+    transform: scale(0.75);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(1.85);
+    opacity: 0;
+  }
+}
+
+.crime-marker-pin:hover {
+  transform: scale(1.15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6) !important;
+  z-index: 1000 !important;
+}
+
+.police-station-pin:hover {
+  transform: scale(1.15);
+}
+
+.cluster-bubble:hover {
+  transform: scale(1.12);
+}
+
+

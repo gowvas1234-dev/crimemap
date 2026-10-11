@@ -34,19 +34,33 @@ export function AreaDatePanel({
   const isAreaFiltered = area !== ALL_AREAS
 
   return (
-    <div className="pointer-events-auto absolute left-14 top-2 z-[1200] sm:left-[3.75rem]">
+    <div className={`pointer-events-auto absolute left-14 top-2 sm:left-[3.75rem] font-serif ${open ? 'z-[1300]' : 'z-[1100]'}`}>
       {open ? (
-        <div className="w-[calc(100vw-16px)] max-w-[290px] rounded-lg border border-navy-600 bg-navy-900/95 shadow-[0_12px_34px_rgba(0,0,0,0.5)] backdrop-blur-sm">
-          <div className="flex items-center justify-between gap-2 border-b border-navy-700 px-3 py-2">
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-steel-300">
-              <MapPin className="size-3.5 text-blue-400" aria-hidden />
+        <div
+          className="w-[calc(100vw-16px)] max-w-[290px] rounded-xl border backdrop-blur-md font-serif transition-all"
+          style={{
+            backgroundColor: 'var(--card-bg)',
+            borderColor: 'var(--card-border)',
+            boxShadow: 'var(--card-shadow)',
+            color: 'var(--card-text-body)',
+          }}
+        >
+          <div
+            className="flex items-center justify-between gap-2 border-b px-3 py-2.5"
+            style={{ borderColor: 'var(--card-header-border)' }}
+          >
+            <span
+              className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.12em] font-cyber"
+              style={{ color: 'var(--card-text-title)' }}
+            >
+              <MapPin className="size-3.5 text-cyan-400" aria-hidden />
               Area &amp; date
             </span>
             <button
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close area and date filters"
-              className="rounded p-1 text-steel-400 hover:bg-navy-700 hover:text-white"
+              className="rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
             >
               <X className="size-3.5" />
             </button>
@@ -77,8 +91,8 @@ export function AreaDatePanel({
               </span>
             </div>
 
-            <div className="flex items-center gap-1.5 rounded-lg border border-navy-600 bg-navy-800 px-2.5 py-1.5">
-              <Calendar className="size-3.5 shrink-0 text-steel-400" aria-hidden />
+            <div className="flex items-center gap-1.5 rounded-lg border border-[#c5b49e] bg-[#f8f4ed] px-2.5 py-1.5 font-mono">
+              <Calendar className="size-3.5 shrink-0 text-slate-500" aria-hidden />
               <input
                 type="date"
                 value={dateRange.from}
@@ -87,9 +101,9 @@ export function AreaDatePanel({
                   onDateRangeChange({ ...dateRange, from: event.target.value })
                 }
                 aria-label="Date range start"
-                className="min-w-0 flex-1 bg-transparent text-[11px] text-steel-200 outline-none"
+                className="min-w-0 flex-1 bg-transparent text-[11px] font-bold text-slate-900 outline-none"
               />
-              <span className="text-[11px] text-steel-500">→</span>
+              <span className="text-[11px] text-slate-400">→</span>
               <input
                 type="date"
                 value={dateRange.to}
@@ -98,7 +112,7 @@ export function AreaDatePanel({
                   onDateRangeChange({ ...dateRange, to: event.target.value })
                 }
                 aria-label="Date range end"
-                className="min-w-0 flex-1 bg-transparent text-[11px] text-steel-200 outline-none"
+                className="min-w-0 flex-1 bg-transparent text-[11px] font-bold text-slate-900 outline-none"
               />
             </div>
 
@@ -111,20 +125,11 @@ export function AreaDatePanel({
                     type="button"
                     onClick={() => onDateRangeChange(preset.range)}
                     aria-pressed={active}
-                    className={`rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors ${
+                    className={`rounded-full border px-2.5 py-1 text-[11px] font-bold transition-colors font-cyber ${
                       active
-                        ? ''
-                        : 'border-navy-600 text-steel-500 hover:border-navy-500'
+                        ? 'border-gray-700 bg-gray-100 text-gray-900'
+                        : 'border-gray-400 text-slate-700 hover:border-gray-600 hover:bg-slate-50'
                     }`}
-                    style={
-                      active
-                        ? {
-                            borderColor: '#60a5fa',
-                            backgroundColor: '#60a5fa26',
-                            color: '#60a5fa',
-                          }
-                        : undefined
-                    }
                   >
                     {preset.label}
                   </button>
@@ -139,12 +144,12 @@ export function AreaDatePanel({
           onClick={() => setOpen(true)}
           aria-label="Open area and date filters"
           title="Area & date filters"
-          className="relative grid size-10 place-items-center rounded-full border border-navy-600 bg-navy-900/95 text-steel-300 shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur-sm transition-colors hover:text-white"
+          className="relative grid size-10 place-items-center rounded-full border border-gray-400 bg-white text-slate-800 shadow-[0_8px_24px_rgba(0,0,0,0.22)] backdrop-blur-md transition-colors hover:text-slate-950 hover:border-gray-600"
         >
           <MapPin className="size-5" aria-hidden />
           {isAreaFiltered ? (
             <span
-              className="absolute right-1.5 top-1.5 size-2 rounded-full bg-blue-400"
+              className="absolute right-1.5 top-1.5 size-2 rounded-full bg-blue-600 ring-2 ring-white"
               aria-hidden
             />
           ) : null}

@@ -175,7 +175,7 @@ export function ReportsView({
   ]
 
   return (
-    <div className="scroll-thin flex h-full flex-col gap-3 overflow-y-auto bg-navy-950 p-3 pb-6 xl:p-4">
+    <div className="scroll-thin flex h-full flex-col gap-3 overflow-y-auto bg-transparent p-3 pb-6 xl:p-4">
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <h1 className="text-[18px] font-bold leading-tight text-white xl:text-[22px]">
@@ -191,38 +191,38 @@ export function ReportsView({
 
       <div className="grid gap-3 md:grid-cols-3">
         <Panel title="Total incidents" subtitle="Filtered">
-          <p className="text-3xl font-bold text-white">{formatNumber(stats.totalIncidents)}</p>
+          <p className="text-4xl font-bold text-blue-950 font-serif">{formatNumber(stats.totalIncidents)}</p>
         </Panel>
         <Panel title="Risk zones" subtitle="Active">
-          <p className="text-3xl font-bold text-white">{formatNumber(zones.length)}</p>
+          <p className="text-4xl font-bold text-red-600 font-serif">{formatNumber(zones.length)}</p>
         </Panel>
         <Panel title="Avg risk score" subtitle="0–100">
-          <p className="text-3xl font-bold text-white">{Math.round(stats.averageRiskScore)}</p>
+          <p className="text-4xl font-bold text-amber-600 font-serif">{Math.round(stats.averageRiskScore)}</p>
         </Panel>
       </div>
 
       <Panel title="Exports" subtitle="CSV files respect the active filters">
-        <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3 font-serif">
           {exportButtons.map((button) => (
             <button
               key={button.label}
               type="button"
               onClick={button.onClick}
-              className="flex items-center justify-between rounded-lg border border-navy-600 bg-navy-800 px-3 py-2.5 text-left hover:border-blue-500/50 hover:bg-navy-700"
+              className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50/80 px-3.5 py-2.5 text-left transition-colors hover:border-blue-500 hover:bg-blue-50/50 shadow-xs"
             >
-              <span className="text-[12px] font-semibold text-white">{button.label}</span>
-              <span className="text-[10px] text-steel-500">{button.hint}</span>
+              <span className="text-[13px] font-bold text-slate-900">{button.label}</span>
+              <span className="text-[10px] text-slate-500 font-mono font-semibold">{button.hint}</span>
             </button>
           ))}
         </div>
       </Panel>
 
       <Panel title="Top categories" subtitle="Share of filtered incidents">
-        <ul className="divide-y divide-navy-700">
+        <ul className="divide-y divide-slate-100 font-serif">
           {categoryStats.slice(0, 6).map((entry) => (
             <li key={entry.category} className="flex items-center justify-between py-2 first:pt-0 last:pb-0">
-              <span className="text-[12px] font-semibold text-white">{entry.category}</span>
-              <span className="font-mono text-[11px] text-steel-300">
+              <span className="text-[13px] font-bold text-slate-900">{entry.category}</span>
+              <span className="font-mono text-[11px] text-slate-600 font-semibold">
                 {entry.count} ({entry.share}%)
               </span>
             </li>

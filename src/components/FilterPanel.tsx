@@ -12,7 +12,7 @@ import {
   type Severity,
 } from '../types'
 import { timePresets } from '../utils/filters'
-import { CRIME_CATEGORY_COLORS, RISK_LEVEL_COLORS } from '../utils/visuals'
+import { CRIME_CATEGORY_COLORS, RISK_LEVEL_COLORS, STATUS_COLORS } from '../utils/visuals'
 
 interface FilterPanelProps {
   filters: CrimeFilterState
@@ -80,12 +80,26 @@ export function FilterPanel({
     }`
 
   return (
-    <div className="pointer-events-auto absolute left-2 top-2 z-[1200] sm:left-3 sm:top-3">
+    <div className={`pointer-events-auto absolute left-2 top-2 sm:left-3 sm:top-3 font-serif ${open ? 'z-[1300]' : 'z-[1100]'}`}>
       {open ? (
-        <div className="w-[calc(100vw-16px)] max-w-[290px] rounded-lg border border-navy-600 bg-navy-900/95 shadow-[0_12px_34px_rgba(0,0,0,0.5)] backdrop-blur-sm">
-          <div className="flex items-center justify-between gap-2 border-b border-navy-700 px-3 py-2">
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-steel-300">
-              <SlidersHorizontal className="size-3.5 text-blue-400" aria-hidden />
+        <div
+          className="w-[calc(100vw-16px)] max-w-[290px] rounded-xl border backdrop-blur-md font-serif transition-all"
+          style={{
+            backgroundColor: 'var(--card-bg)',
+            borderColor: 'var(--card-border)',
+            boxShadow: 'var(--card-shadow)',
+            color: 'var(--card-text-body)',
+          }}
+        >
+          <div
+            className="flex items-center justify-between gap-2 border-b px-3 py-2.5"
+            style={{ borderColor: 'var(--card-header-border)' }}
+          >
+            <span
+              className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.12em] font-cyber"
+              style={{ color: 'var(--card-text-title)' }}
+            >
+              <SlidersHorizontal className="size-3.5 text-cyan-400" aria-hidden />
               Crime filters
             </span>
             <div className="flex items-center gap-1">
@@ -94,7 +108,7 @@ export function FilterPanel({
                   type="button"
                   onClick={onReset}
                   title="Reset filters"
-                  className="rounded p-1 text-steel-400 hover:bg-navy-700 hover:text-white"
+                  className="rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
                 >
                   <RotateCcw className="size-3.5" />
                 </button>
@@ -103,15 +117,15 @@ export function FilterPanel({
                 type="button"
                 onClick={() => setOpen(false)}
                 aria-label="Close filters"
-                className="rounded p-1 text-steel-400 hover:bg-navy-700 hover:text-white"
+                className="rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
               >
                 <X className="size-3.5" />
               </button>
             </div>
           </div>
 
-          <div className="scroll-thin max-h-[55vh] overflow-y-auto px-3 py-3 sm:max-h-[68vh]">
-          <div className="mb-1.5 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.14em] text-steel-500">
+          <div className="scroll-thin max-h-[55vh] overflow-y-auto px-3 py-3 sm:max-h-[68vh] font-serif">
+          <div className="mb-1.5 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.12em] text-slate-500 font-serif">
             <span>Time period</span>
             <span className="normal-case tracking-normal text-steel-600">
               {filters.dateRange.from} → {filters.dateRange.to}
@@ -129,7 +143,7 @@ export function FilterPanel({
                   className={chipClass(active)}
                   style={
                     active
-                      ? { borderColor: '#60a5fa', backgroundColor: '#60a5fa26', color: '#60a5fa' }
+                      ? { borderColor: '#2c5282', backgroundColor: '#2c52821a', color: '#2c5282' }
                       : undefined
                   }
                 >
@@ -270,17 +284,18 @@ export function FilterPanel({
           <div className="flex flex-wrap gap-1.5">
             {INCIDENT_STATUSES.map((status) => {
               const active = filters.statuses.includes(status)
+              const color = STATUS_COLORS[status] ?? '#2c5282'
               return (
                 <button
                   key={status}
                   type="button"
                   onClick={() => toggleStatus(status)}
                   aria-pressed={active}
-                  className="rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors"
+                  className="rounded-full border px-2.5 py-1 text-[10px] font-bold font-serif transition-colors"
                   style={{
-                    borderColor: active ? '#60a5fa' : '#24344f',
-                    backgroundColor: active ? '#60a5fa26' : 'transparent',
-                    color: active ? '#60a5fa' : '#64748b',
+                    borderColor: active ? color : '#cbd5e1',
+                    backgroundColor: active ? `${color}14` : 'transparent',
+                    color: active ? color : '#64748b',
                   }}
                 >
                   {status}
@@ -289,10 +304,10 @@ export function FilterPanel({
             })}
           </div>
 
-          <div className="mt-4 rounded border border-navy-600 bg-navy-800 px-2.5 py-2">
-            <p className="text-[10px] leading-relaxed text-steel-400">
+          <div className="mt-4 rounded-lg border border-gray-200 bg-slate-50 px-2.5 py-2 font-serif">
+            <p className="text-[11px] leading-relaxed text-slate-600">
               Showing{' '}
-              <span className="font-bold text-white">
+              <span className="font-bold text-slate-900 font-mono">
                 {visibleCount} / {totalCount}
               </span>{' '}
               demo incidents matching the active filters.
@@ -301,7 +316,7 @@ export function FilterPanel({
               <button
                 type="button"
                 onClick={onReset}
-                className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-semibold text-blue-400 hover:text-blue-300"
+                className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-bold text-slate-800 hover:text-black"
               >
                 <X className="size-3" /> Clear filters
               </button>
@@ -315,12 +330,12 @@ export function FilterPanel({
           onClick={() => setOpen(true)}
           aria-label="Open crime filters"
           title="Crime filters"
-          className="relative grid size-10 place-items-center rounded-full border border-navy-600 bg-navy-900/95 text-steel-300 shadow-[0_10px_30px_rgba(0,0,0,0.5)] backdrop-blur-sm transition-colors hover:text-white"
+          className="relative grid size-10 place-items-center rounded-full border border-gray-400 bg-white text-slate-800 shadow-[0_8px_24px_rgba(0,0,0,0.22)] backdrop-blur-md transition-colors hover:text-slate-950 hover:border-gray-600"
         >
           <SlidersHorizontal className="size-5" aria-hidden />
           {isDirty ? (
             <span
-              className="absolute right-1.5 top-1.5 size-2 rounded-full bg-blue-400"
+              className="absolute right-1.5 top-1.5 size-2 rounded-full bg-blue-600 ring-2 ring-white"
               aria-hidden
             />
           ) : null}

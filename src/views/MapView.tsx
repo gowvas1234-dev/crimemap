@@ -152,7 +152,7 @@ export function MapView({
   )
 
   return (
-    <div className="relative h-full w-full">
+    <div className="relative h-full min-h-[560px] w-full flex-1">
       <CrimeMap
         incidents={incidents}
         zones={zones}

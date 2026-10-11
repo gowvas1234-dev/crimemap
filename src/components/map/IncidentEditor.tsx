@@ -16,7 +16,7 @@ interface IncidentEditorProps {
 }
 
 const FIELD_CLASS =
-  'h-10 w-full rounded-lg border border-navy-600 bg-navy-800 px-3 text-[12px] text-steel-200 outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500/40'
+  'h-10 w-full rounded-lg border border-slate-300 bg-slate-50 px-3 text-[13px] text-slate-900 outline-none transition-colors focus:border-blue-600 focus:ring-1 focus:ring-blue-600/40 font-serif'
 
 /** ISO timestamp -> value usable by <input type="datetime-local">. */
 function toLocalInput(iso: string): string {
@@ -96,15 +96,33 @@ export function IncidentEditor({
 
   return (
     <aside
-      className="pointer-events-auto scroll-thin absolute inset-x-2 bottom-2 z-[1400] max-h-[82%] overflow-y-auto rounded-xl border border-navy-600 bg-navy-900/97 shadow-[0_18px_50px_rgba(0,0,0,0.6)] backdrop-blur-sm"
+      className="pointer-events-auto scroll-thin absolute inset-x-2 bottom-2 z-[1400] max-h-[82%] overflow-y-auto rounded-xl border xl:inset-x-auto xl:bottom-3 xl:right-3 xl:top-3 xl:max-h-none xl:w-[420px] font-serif transition-all"
+      style={{
+        backgroundColor: 'var(--card-bg)',
+        borderColor: 'var(--card-border)',
+        boxShadow: 'var(--card-shadow)',
+        color: 'var(--card-text-body)',
+      }}
       aria-label={`Update incident ${incident.id}`}
     >
-      <header className="sticky top-0 z-10 flex items-start justify-between gap-2 border-b border-navy-700 bg-navy-900/97 px-3 py-2.5 backdrop-blur">
+      <header
+        className="sticky top-0 z-10 flex items-start justify-between gap-2 border-b px-4 py-3 backdrop-blur font-serif transition-colors"
+        style={{
+          backgroundColor: 'var(--card-bg)',
+          borderColor: 'var(--card-header-border)',
+        }}
+      >
         <div className="min-w-0">
-          <p className="editor-eyebrow font-bold uppercase tracking-[0.16em] text-steel-500">
+          <p
+            className="editor-eyebrow font-bold uppercase tracking-[0.14em] font-cyber transition-colors"
+            style={{ color: 'var(--card-text-title)' }}
+          >
             {isCreate ? 'Report new crime' : 'Update incident'}
           </p>
-          <h2 className="truncate text-[14px] font-semibold text-white">
+          <h2
+            className="truncate text-[15px] font-bold font-cyber transition-colors"
+            style={{ color: 'var(--card-text-title)' }}
+          >
             {incident.id} &middot; {area || incident.area}
           </h2>
         </div>
@@ -112,7 +130,7 @@ export function IncidentEditor({
           type="button"
           onClick={onCancel}
           aria-label="Cancel editing"
-          className="shrink-0 rounded p-1 text-steel-400 hover:bg-navy-700 hover:text-white"
+          className="shrink-0 rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
         >
           <X className="size-4" />
         </button>

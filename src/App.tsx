@@ -4,8 +4,10 @@ import { buildAnalysisWindow, buildRiskForecast, computeRiskZones } from './anal
 import { detectChanges } from './analytics/changes'
 import { buildDispatchPlan, buildRecommendation } from './analytics/recommend'
 import { buildPatrolPlan } from './analytics/patrol'
+import { AnimatedBackground } from './components/AnimatedBackground'
 import { DemoBanner } from './components/DemoBanner'
 import { Header } from './components/Header'
+import { OfficialGovBanner } from './components/OfficialGovBanner'
 import { TopNav } from './components/TopNav'
 import { DEMO_AREAS } from './data/areas'
 import { PatrolProvider } from './patrol/PatrolContext'
@@ -17,6 +19,7 @@ import type {
   DateRange,
   PoliceStation,
   RiskZone,
+  ThemeMode,
 } from './types'
 import { CRIME_CATEGORIES, INCIDENT_STATUSES, RISK_LEVELS, SEVERITIES } from './types'
 import {
@@ -67,13 +70,37 @@ interface ZoneSelection {
 }
 
 export default function App() {
-  const [view, setView] = useState<AppView>('map')
+  const [view, setView] = useState<AppView>('dashboard')
+  const [theme, setTheme] = useState<ThemeMode>(() => {
+    try {
+      const stored = localStorage.getItem('crimemap-theme')
+      if (stored === 'light' || stored === 'dark') return stored
+    } catch {}
+    return 'dark'
+  })
   const [filters, setFilters] = useState<CrimeFilterState>(INITIAL_FILTERS)
   const [data, setData] = useState<LoadState | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [reloadKey, setReloadKey] = useState(0)
   const [selection, setSelection] = useState<ZoneSelection | null>(null)
   const [generatedAt] = useState(() => new Date().toISOString())
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('crimemap-theme', theme)
+    } catch {}
+    if (theme === 'light') {
+      document.documentElement.classList.add('theme-light')
+      document.body.classList.add('theme-light')
+    } else {
+      document.documentElement.classList.remove('theme-light')
+      document.body.classList.remove('theme-light')
+    }
+  }, [theme])
+
+  const toggleTheme = useCallback(() => {
+    setTheme((current) => (current === 'light' ? 'dark' : 'light'))
+  }, [])
 
   useEffect(() => {
     let active = true
@@ -271,7 +298,7 @@ export default function App() {
   const renderView = () => {
     switch (view) {
       case 'dashboard':
-        return <DashboardView stats={stats} zones={visibleZones} />
+        return <DashboardView stats={stats} zones={visibleZones} onNavigate={navigate} />
       case 'hotspots':
         return (
           <HotspotsView
@@ -357,35 +384,78 @@ export default function App() {
     }
   }
 
-  const mainClass =
-    view === 'map'
-      ? 'relative min-w-0 h-[60vh] min-h-[320px] sm:h-[70vh] xl:h-auto xl:min-h-0 xl:flex-1'
-      : 'relative min-w-0 xl:min-h-0 xl:flex-1'
-
   return (
     <PatrolProvider plan={patrolPlan}>
-      <div className="flex min-h-dvh justify-center bg-black text-steel-100">
-        <div className="relative flex min-h-dvh w-full max-w-[430px] flex-col overflow-x-hidden bg-navy-950 shadow-[0_0_60px_rgba(0,0,0,0.8)] ring-1 ring-navy-800">
-          <div className="flex min-w-0 flex-1 flex-col">
-            <DemoBanner />
-            <TopNav activeView={view} onNavigate={navigate} />
-            <Header
-              area={filters.area}
-              areas={areaOptions}
-              onAreaChange={(area) => setFilters((current) => ({ ...current, area }))}
-              searchQuery={filters.searchQuery}
-              onSearchChange={(searchQuery) =>
-                setFilters((current) => ({ ...current, searchQuery }))
-              }
-              dateRange={filters.dateRange}
-              onDateRangeChange={(dateRange) =>
-                setFilters((current) => ({ ...current, dateRange }))
-              }
-              compact={view === 'map'}
-            />
+      <div
+        className="relative flex min-h-dvh flex-col transition-colors duration-250 overflow-x-hidden"
+        style={{
+          backgroundColor: 'var(--bg-app)',
+          color: 'var(--text-main)',
+        }}
+      >
+        {/* Full-screen Graphical Animated Background featuring Puducherry Police Emblem */}
+        <AnimatedBackground theme={theme} />
 
-            <div className="flex flex-col">
-              <main className={mainClass} key={view}>
+        {/* Central Tactical Dashboard Shell with Khaki Police Theme */}
+        <div
+          className="relative z-10 flex min-h-dvh w-full max-w-full lg:max-w-[1700px] xl:max-w-[1920px] mx-auto flex-col backdrop-blur-md shadow-[0_0_90px_rgba(0,0,0,0.8)] ring-1 transition-colors duration-250"
+          style={{
+            backgroundColor: 'var(--bg-shell)',
+            borderColor: 'var(--border-shell)',
+          }}
+        >
+          {/* Elegant Police Emblem Background Watermark (Subtle, non-distracting) */}
+          <div className="pointer-events-none fixed inset-0 flex items-center justify-center overflow-hidden z-0 select-none">
+            <div className="relative flex items-center justify-center">
+              {/* Calm ambient light reacting to theme */}
+              <div
+                className="absolute size-[550px] rounded-full blur-[120px] transition-all"
+                style={{ backgroundColor: 'var(--watermark-glow-1)' }}
+              />
+              <div
+                className="absolute size-[450px] rounded-full blur-[110px] transition-all"
+                style={{ backgroundColor: 'var(--watermark-glow-2)' }}
+              />
+              <img
+                src="/pp-logo-2.webp"
+                alt="Puducherry Police"
+                style={{ opacity: 'var(--emblem-opacity)' }}
+                className="w-[85vw] max-w-[540px] filter drop-shadow-[0_0_25px_rgba(37,99,235,0.3)] object-contain transition-opacity duration-300"
+              />
+            </div>
+          </div>
+
+          <div className="relative z-10 flex min-w-0 flex-1 flex-col">
+            {/* Precision Gray Command Trim Line */}
+            <div className="h-[2px] w-full shrink-0 bg-gray-500 shadow-xs" />
+
+            <OfficialGovBanner />
+            <DemoBanner />
+            <TopNav
+              activeView={view}
+              onNavigate={navigate}
+              theme={theme}
+              onToggleTheme={toggleTheme}
+            />
+            {view === 'map' ? (
+              <Header
+                area={filters.area}
+                areas={areaOptions}
+                onAreaChange={(area) => setFilters((current) => ({ ...current, area }))}
+                searchQuery={filters.searchQuery}
+                onSearchChange={(searchQuery) =>
+                  setFilters((current) => ({ ...current, searchQuery }))
+                }
+                dateRange={filters.dateRange}
+                onDateRangeChange={(dateRange) =>
+                  setFilters((current) => ({ ...current, dateRange }))
+                }
+                compact={false}
+              />
+            ) : null}
+
+            <div className="flex flex-col flex-1 min-h-[580px] h-[calc(100dvh-175px)]">
+              <main className="relative flex flex-col min-w-0 flex-1 h-full w-full" key={view}>
                 {renderView()}
               </main>
             </div>

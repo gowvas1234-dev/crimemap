@@ -8,19 +8,38 @@ interface StatTileProps {
   icon?: ReactNode
 }
 
-export function StatTile({ label, value, hint, color = '#e2e8f0', icon }: StatTileProps) {
+export function StatTile({ label, value, hint, color = '#38bdf8', icon }: StatTileProps) {
   return (
-    <div className="rounded-lg border border-navy-600 bg-navy-800 px-3 py-2.5">
+    <div
+      className="rounded-xl border px-3.5 py-3 transition-all duration-200"
+      style={{
+        backgroundColor: 'var(--card-bg)',
+        borderColor: 'var(--card-border)',
+        boxShadow: 'var(--card-shadow)',
+      }}
+    >
       <div className="flex items-center justify-between gap-2">
-        <span className="text-[10px] font-bold uppercase tracking-[0.12em] text-steel-400">
+        <span
+          className="text-[12px] font-bold uppercase tracking-[0.1em] font-cyber transition-colors"
+          style={{ color: 'var(--card-text-title)' }}
+        >
           {label}
         </span>
-        {icon ? <span className="text-steel-500">{icon}</span> : null}
+        {icon ? (
+          <span style={{ color: 'var(--card-text-muted)' }}>{icon}</span>
+        ) : null}
       </div>
-      <div className="mt-1 text-xl font-bold leading-none" style={{ color }}>
+      <div className="mt-1.5 text-3xl font-extrabold leading-none font-mono" style={{ color }}>
         {value}
       </div>
-      {hint ? <div className="mt-1 text-[10px] leading-tight text-steel-500">{hint}</div> : null}
+      {hint ? (
+        <div
+          className="mt-1 text-[11px] leading-tight font-medium transition-colors"
+          style={{ color: 'var(--card-text-muted)' }}
+        >
+          {hint}
+        </div>
+      ) : null}
     </div>
   )
 }
@@ -36,15 +55,15 @@ interface BarRowProps {
 export function BarRow({ label, value, max, color, meta }: BarRowProps) {
   const width = max > 0 ? Math.max((value / max) * 100, value > 0 ? 3 : 0) : 0
   return (
-    <div className="py-1.5">
-      <div className="flex items-baseline justify-between gap-3 text-[11px]">
-        <span className="truncate text-steel-200">{label}</span>
-        <span className="shrink-0 font-semibold text-steel-300">
+    <div className="py-2">
+      <div className="flex items-baseline justify-between gap-3 text-[13px]">
+        <span className="truncate text-slate-800 font-semibold">{label}</span>
+        <span className="shrink-0 font-bold text-slate-900 font-mono">
           {value}
-          {meta ? <span className="ml-1 text-steel-500">{meta}</span> : null}
+          {meta ? <span className="ml-1 text-slate-500 font-normal font-sans text-[12px]">({meta})</span> : null}
         </span>
       </div>
-      <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-navy-700">
+      <div className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-slate-100 border border-slate-200/50">
         <div
           className="h-full rounded-full transition-[width] duration-300"
           style={{ width: `${width}%`, backgroundColor: color }}

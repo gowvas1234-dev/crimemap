@@ -31,21 +31,26 @@ export function HotspotsView({
     : null
 
   return (
-    <div className="scroll-thin flex h-full flex-col gap-3 overflow-y-auto bg-navy-950 p-3 pb-6 xl:p-4">
+    <div className="scroll-thin flex h-full flex-col gap-3 overflow-y-auto bg-transparent p-3 pb-6 xl:p-4">
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="text-[18px] font-bold leading-tight text-white xl:text-[22px]">
-            Dynamic Risk Zones
+          <h1
+            className="text-[18px] font-bold leading-tight xl:text-[22px] font-cyber transition-colors"
+            style={{ color: 'var(--text-main)' }}
+          >
+            Dynamic Risk Zones &amp; Localities
           </h1>
-          <p className="mt-1 max-w-3xl text-[13px] leading-relaxed text-steel-400">
+          <p
+            className="mt-1 max-w-3xl text-[13px] leading-relaxed transition-colors font-serif"
+            style={{ color: 'var(--text-muted)' }}
+          >
             Deterministic, explainable risk zones derived from incident frequency, trend, severity,
-            repeat activity, time-of-day and proximity. Scores are reproducible and always
-            accompanied by their breakdown.
+            repeat activity, time-of-day and proximity. Scores are reproducible and accompanied by their breakdown.
           </p>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <DemoChip />
-          <span className="rounded-lg border border-navy-600 bg-navy-800 px-3 py-2 text-[12px] font-semibold text-steel-300">
+          <span className="rounded-lg border border-gray-400 bg-white px-3 py-2 text-[12px] font-bold text-slate-800 shadow-2xs font-serif">
             {sorted.length} active zones
           </span>
         </div>
@@ -66,26 +71,45 @@ export function HotspotsView({
           {sorted.map((zone) => (
             <article
               key={zone.id}
-              className="flex flex-col gap-3 rounded-xl border border-navy-700 bg-navy-900 p-3"
+              className="flex flex-col gap-3 rounded-xl border p-3.5 font-serif transition-all duration-200"
+              style={{
+                backgroundColor: 'var(--card-bg)',
+                borderColor: 'var(--card-border)',
+                boxShadow: 'var(--card-shadow)',
+                color: 'var(--card-text-body)',
+              }}
             >
               <header className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
-                  <p className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-steel-500">
+                  <p
+                    className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.14em] font-cyber transition-colors"
+                    style={{ color: 'var(--card-text-title)' }}
+                  >
                     {zone.isEmerging ? (
                       <>
-                        <Zap className="size-3.5 text-amber-300" aria-hidden /> Emerging hotspot
+                        <Zap className="size-3.5 text-amber-500" aria-hidden /> Emerging hotspot
                       </>
                     ) : (
                       <>
-                        <Flame className="size-3.5 text-red-400" aria-hidden /> Active risk zone
+                        <Flame className="size-3.5 text-red-500" aria-hidden /> Active risk zone
                       </>
                     )}
                   </p>
-                  <h2 className="truncate text-[15px] font-bold text-white">{zone.area}</h2>
+                  <h2
+                    className="truncate text-[18px] font-bold font-cyber transition-colors"
+                    style={{ color: 'var(--card-text-title)' }}
+                  >
+                    {zone.area}
+                  </h2>
                   <div className="mt-1 flex flex-wrap items-center gap-2">
                     <RiskBadge level={zone.riskLevel} />
                     <TrendIndicator trend={zone.trend} percent={zone.trendPercent} />
-                    <span className="text-[11px] text-steel-500">{zone.id}</span>
+                    <span
+                      className="text-[12px] font-mono font-bold transition-colors"
+                      style={{ color: 'var(--card-text-muted)' }}
+                    >
+                      {zone.id}
+                    </span>
                   </div>
                 </div>
                 <button
@@ -94,7 +118,7 @@ export function HotspotsView({
                     onSelectZone(zone)
                     onFocusArea(zone.area)
                   }}
-                  className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-blue-500/60 bg-blue-600/90 px-2.5 py-1.5 text-[11px] font-semibold text-white hover:bg-blue-500"
+                  className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-gray-400 bg-slate-900 px-3 py-1.5 text-[12px] font-bold text-white shadow-xs hover:bg-black transition-colors"
                 >
                   <Radar className="size-3.5" /> View on map
                 </button>
@@ -102,13 +126,69 @@ export function HotspotsView({
 
               <RiskBreakdown zone={zone} compact />
 
-              <div className="grid grid-cols-2 gap-1.5 border-t border-navy-700 pt-2 text-[11px] text-steel-400">
-                <div>Peak: {zone.peakWindow}</div>
-                <div>Peak share: {zone.peakShare}%</div>
-                <div>Repeat: {zone.repeatShare}% within 250 m</div>
-                <div>Nearby: {zone.nearbyCount} incidents &lt; 3 km</div>
-                <div>Dominant: {zone.dominantCrime}</div>
-                <div>Radius: {zone.radiusMeters} m</div>
+              <div
+                className="grid grid-cols-2 gap-2 border-t pt-2.5 text-[12px] transition-colors"
+                style={{
+                  borderColor: 'var(--card-header-border)',
+                  color: 'var(--card-text-muted)',
+                }}
+              >
+                <div>
+                  Peak:{' '}
+                  <span
+                    className="font-bold transition-colors"
+                    style={{ color: 'var(--card-text-body)' }}
+                  >
+                    {zone.peakWindow}
+                  </span>
+                </div>
+                <div>
+                  Peak share:{' '}
+                  <span
+                    className="font-bold transition-colors"
+                    style={{ color: 'var(--card-text-body)' }}
+                  >
+                    {zone.peakShare}%
+                  </span>
+                </div>
+                <div>
+                  Repeat:{' '}
+                  <span
+                    className="font-bold transition-colors"
+                    style={{ color: 'var(--card-text-body)' }}
+                  >
+                    {zone.repeatShare}%
+                  </span>{' '}
+                  within 250 m
+                </div>
+                <div>
+                  Nearby:{' '}
+                  <span
+                    className="font-bold transition-colors"
+                    style={{ color: 'var(--card-text-body)' }}
+                  >
+                    {zone.nearbyCount}
+                  </span>{' '}
+                  incidents &lt; 3 km
+                </div>
+                <div>
+                  Dominant:{' '}
+                  <span
+                    className="font-bold transition-colors"
+                    style={{ color: 'var(--card-text-body)' }}
+                  >
+                    {zone.dominantCrime}
+                  </span>
+                </div>
+                <div>
+                  Radius:{' '}
+                  <span
+                    className="font-bold transition-colors"
+                    style={{ color: 'var(--card-text-body)' }}
+                  >
+                    {zone.radiusMeters} m
+                  </span>
+                </div>
               </div>
             </article>
           ))}

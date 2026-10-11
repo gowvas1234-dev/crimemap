@@ -1,4 +1,3 @@
-
 import { useEffect, useRef } from 'react'
 import {
   CircleMarker,
@@ -27,13 +26,14 @@ import { PatrolLayer } from './PatrolLayer'
 import { PoliceStationMarker } from './PoliceStationMarker'
 import { RiskZoneLayer } from './RiskZoneLayer'
 
+
+
 /**
- * Puducherry district bounding rectangle.
- * Coordinates use [latitude, longitude] order for Leaflet.
+ * Outer max-bounds to keep user comfortably within Pondicherry territory.
  */
-const PUDUCHERRY_BOUNDS: [[number, number], [number, number]] = [
-  [boundary.bbox.south, boundary.bbox.west],
-  [boundary.bbox.north, boundary.bbox.east],
+const PUDUCHERRY_MAX_BOUNDS: [[number, number], [number, number]] = [
+  [11.72, 79.58],
+  [12.12, 79.98],
 ]
 
 /**
@@ -44,8 +44,7 @@ const BOUNDARY_POSITIONS: [number, number][] =
   boundary.outer.map(([lng, lat]) => [lat, lng])
 
 /**
- * Outer ring for the outside-area mask.
- * This covers the world area supported by Web Mercator.
+ * Outer ring for the outside-area mask covering the world.
  */
 const WORLD_RING: [number, number][] = [
   [-85, -180],
@@ -55,42 +54,8 @@ const WORLD_RING: [number, number][] = [
 ]
 
 /**
- * Spotlight radius around a selected locality.
- * Measured in approximate geographic degrees.
- */
-const AREA_SPOTLIGHT_RADIUS = 0.008
-
-/**
- * Build a circular ring around a coordinate.
- * Longitude is adjusted for latitude to make the circle
- * look more consistent on the map.
- */
-function buildSpotlightRing(
-  lat: number,
-  lng: number,
-  radius: number,
-  steps = 72,
-): [number, number][] {
-  const lngScale = 1 / Math.cos((lat * Math.PI) / 180)
-  const ring: [number, number][] = []
-
-  for (let i = 0; i < steps; i += 1) {
-    const angle = (i / steps) * Math.PI * 2
-
-    ring.push([
-      lat + radius * Math.sin(angle),
-      lng + radius * lngScale * Math.cos(angle),
-    ])
-  }
-
-  return ring
-}
-
-/**
  * Return true if the supplied coordinate is inside the
  * exterior boundary ring in puducherry-boundary.json.
- *
- * The JSON coordinates are [longitude, latitude].
  */
 function isInsidePuducherry(lat: number, lng: number): boolean {
   const ring = boundary.outer
@@ -112,33 +77,6 @@ function isInsidePuducherry(lat: number, lng: number): boolean {
   return inside
 }
 
-/**
- * Build the inner hole of the outside mask.
- *
- * All Areas: reveal the complete district.
- * One locality: reveal a spotlight around that locality.
- */
-function maskHole(selectedArea: string): [number, number][] {
-  if (selectedArea !== ALL_AREAS) {
-    const area = DEMO_AREAS.find(
-      (entry) => entry.name === selectedArea,
-    )
-
-    if (
-      area &&
-      isInsidePuducherry(area.lat, area.lng)
-    ) {
-      return buildSpotlightRing(
-        area.lat,
-        area.lng,
-        AREA_SPOTLIGHT_RADIUS,
-      )
-    }
-  }
-
-  return BOUNDARY_POSITIONS
-}
-
 interface CrimeMapProps {
   incidents: CrimeIncident[]
   zones: RiskZone[]
@@ -154,7 +92,7 @@ interface CrimeMapProps {
 }
 
 /**
- * Move the camera when the selected area changes.
+ * Smoothly pan/zoom to the selected Pondicherry area.
  */
 function AreaCameraController({
   selectedArea,
@@ -165,24 +103,13 @@ function AreaCameraController({
 
   useEffect(() => {
     if (selectedArea === ALL_AREAS) {
-      map.flyToBounds(PUDUCHERRY_BOUNDS, {
-        duration: 0.35,
-        maxZoom: 14,
-        padding: [20, 20],
-      })
+      map.flyTo([11.933, 79.828], 13, { duration: 0.45 })
       return
     }
 
-    const area = DEMO_AREAS.find(
-      (entry) => entry.name === selectedArea,
-    )
-
-    if (area && isInsidePuducherry(area.lat, area.lng)) {
-      map.flyTo(
-        [area.lat, area.lng],
-        Math.max(map.getZoom(), 14),
-        { duration: 0.35 },
-      )
+    const area = DEMO_AREAS.find((entry) => entry.name === selectedArea)
+    if (area) {
+      map.flyTo([area.lat, area.lng], 15, { duration: 0.45 })
     }
   }, [map, selectedArea])
 
@@ -190,11 +117,7 @@ function AreaCameraController({
 }
 
 /**
- * Focus the camera on an in-bound incident when the
- * search query changes.
- *
- * This uses the first in-bound incident in the supplied
- * array; it does not perform text matching itself.
+ * Focus the camera on an in-bound incident when search changes.
  */
 function SearchFocusController({
   query,
@@ -208,39 +131,30 @@ function SearchFocusController({
 
   useEffect(() => {
     const trimmed = query.trim()
-
     if (!trimmed) {
       lastQuery.current = ''
       return
     }
 
-    if (trimmed === lastQuery.current) {
-      return
-    }
-
+    if (trimmed === lastQuery.current) return
     lastQuery.current = trimmed
 
     const match = incidents.find((incident) =>
       isInsidePuducherry(incident.lat, incident.lng),
     )
 
-    if (!match) {
-      return
+    if (match) {
+      map.flyTo([match.lat, match.lng], Math.max(map.getZoom(), 15), {
+        duration: 0.5,
+      })
     }
-
-    map.flyTo(
-      [match.lat, match.lng],
-      Math.max(map.getZoom(), 16),
-      { duration: 0.6 },
-    )
   }, [query, incidents, map])
 
   return null
 }
 
 /**
- * Close the incident details sheet when the empty map is tapped.
- * Marker clicks stop propagation, so they never reach this handler.
+ * Close incident sheet on map click.
  */
 function TapToDismiss({ onDeselect }: { onDeselect: () => void }) {
   const map = useMap()
@@ -256,8 +170,7 @@ function TapToDismiss({ onDeselect }: { onDeselect: () => void }) {
 }
 
 /**
- * Capture a map click as a new incident location when
- * location-picking mode is enabled.
+ * Capture a map click for new incident reporting within Pondicherry.
  */
 function LocationPicker({
   active,
@@ -269,23 +182,15 @@ function LocationPicker({
   const map = useMap()
 
   useEffect(() => {
-    if (!active) {
-      return
-    }
+    if (!active) return
 
     const handleClick = (event: LeafletMouseEvent) => {
       const { lat, lng } = event.latlng
-
-      // Do not allow new incident locations outside the district.
-      if (!isInsidePuducherry(lat, lng)) {
-        return
-      }
-
+      if (!isInsidePuducherry(lat, lng)) return
       onPick({ lat, lng })
     }
 
     map.on('click', handleClick)
-
     return () => {
       map.off('click', handleClick)
     }
@@ -295,7 +200,7 @@ function LocationPicker({
 }
 
 /**
- * Main CRIMEMAP Leaflet map.
+ * Crystal-Clear Pondicherry Crime Map.
  */
 export function CrimeMap({
   incidents,
@@ -310,55 +215,89 @@ export function CrimeMap({
   pickingLocation,
   onPickLocation,
 }: CrimeMapProps) {
+  const selectedAreaTarget =
+    selectedArea !== ALL_AREAS
+      ? DEMO_AREAS.find((entry) => entry.name === selectedArea) ?? null
+      : null
+
   return (
     <MapContainer
-      bounds={PUDUCHERRY_BOUNDS}
-      boundsOptions={{ padding: [20, 20] }}
-      maxBounds={PUDUCHERRY_BOUNDS}
-      maxBoundsViscosity={1.0}
-      minZoom={11}
+      center={[11.933, 79.828]}
+      zoom={13}
+      minZoom={12}
       maxZoom={18}
+      maxBounds={PUDUCHERRY_MAX_BOUNDS}
+      maxBoundsViscosity={0.7}
       zoomControl={false}
       scrollWheelZoom
       dragging
       touchZoom
       doubleClickZoom
-      className="h-full w-full"
+      className="h-full w-full outline-none"
+      style={{ height: '100%', minHeight: '560px', width: '100%' }}
     >
-      {/* Base maps and optional data layers */}
+      {/* Base maps with Google Maps as default */}
       <LayersControl position="topright">
-        <LayersControl.BaseLayer
-          checked
-          name="OpenStreetMap Standard"
-        >
+        <LayersControl.BaseLayer checked name="Google Maps (Roadmap)">
           <TileLayer
-            url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            maxZoom={19}
+            url="https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
+            attribution='&copy; <a href="https://maps.google.com" target="_blank" rel="noreferrer">Google Maps</a>'
+            maxZoom={20}
+            subdomains={['0', '1', '2', '3']}
+            keepBuffer={4}
           />
         </LayersControl.BaseLayer>
 
-        <LayersControl.BaseLayer name="OSM Humanitarian (HOT)">
+        <LayersControl.BaseLayer name="Google Maps (Hybrid Satellite)">
           <TileLayer
-            url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
-            attribution="&copy; OpenStreetMap contributors, tiles style by HOT hosted by OSM France"
-            maxZoom={19}
+            url="https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}"
+            attribution='&copy; <a href="https://maps.google.com" target="_blank" rel="noreferrer">Google Maps</a>'
+            maxZoom={20}
+            subdomains={['0', '1', '2', '3']}
+            keepBuffer={4}
           />
         </LayersControl.BaseLayer>
 
-        {/* Puducherry district outline */}
-        <LayersControl.Overlay
-          checked
-          name="Puducherry boundary"
-        >
+        <LayersControl.BaseLayer name="Google Maps (Terrain)">
+          <TileLayer
+            url="https://mt{s}.google.com/vt/lyrs=p&x={x}&y={y}&z={z}"
+            attribution='&copy; <a href="https://maps.google.com" target="_blank" rel="noreferrer">Google Maps</a>'
+            maxZoom={20}
+            subdomains={['0', '1', '2', '3']}
+            keepBuffer={4}
+          />
+        </LayersControl.BaseLayer>
+
+        <LayersControl.BaseLayer name="High-Clarity Streets (Voyager)">
+          <TileLayer
+            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+            maxZoom={19}
+            subdomains="abcd"
+          />
+        </LayersControl.BaseLayer>
+
+        <LayersControl.BaseLayer name="Tactical Dark (CartoDB Dark)">
+          <TileLayer
+            url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+            maxZoom={19}
+            subdomains="abcd"
+          />
+        </LayersControl.BaseLayer>
+
+        {/* Crisp Puducherry boundary outline */}
+        <LayersControl.Overlay checked name="Puducherry boundary">
           <LayerGroup>
             <Polygon
               positions={BOUNDARY_POSITIONS}
               pathOptions={{
-                color: '#38bdf8',
-                weight: 1.5,
-                dashArray: '8 6',
-                fill: false,
+                color: '#0284c7',
+                weight: 2.5,
+                dashArray: '6 4',
+                fill: true,
+                fillColor: '#38bdf8',
+                fillOpacity: 0.04,
                 interactive: false,
               }}
             />
@@ -366,10 +305,7 @@ export function CrimeMap({
         </LayersControl.Overlay>
 
         {/* Crime incidents */}
-        <LayersControl.Overlay
-          checked
-          name="Crime incidents"
-        >
+        <LayersControl.Overlay checked name="Crime incidents">
           <LayerGroup>
             <IncidentLayer
               incidents={incidents}
@@ -379,10 +315,7 @@ export function CrimeMap({
         </LayersControl.Overlay>
 
         {/* Risk zones */}
-        <LayersControl.Overlay
-          checked
-          name="Risk zones"
-        >
+        <LayersControl.Overlay checked name="Risk zones">
           <LayerGroup>
             <RiskZoneLayer
               zones={zones}
@@ -393,10 +326,7 @@ export function CrimeMap({
         </LayersControl.Overlay>
 
         {/* Police stations */}
-        <LayersControl.Overlay
-          checked
-          name="Police stations"
-        >
+        <LayersControl.Overlay checked name="Police stations">
           <LayerGroup>
             {stations.map((station) => (
               <PoliceStationMarker
@@ -408,31 +338,22 @@ export function CrimeMap({
         </LayersControl.Overlay>
 
         {/* Simulated patrol units */}
-        <LayersControl.Overlay
-          checked
-          name="Patrol units (simulated)"
-        >
+        <LayersControl.Overlay checked name="Patrol units (simulated)">
           <LayerGroup>
             <PatrolLayer />
           </LayerGroup>
         </LayersControl.Overlay>
       </LayersControl>
 
-      {/* Darken the area outside the selected boundary/spotlight */}
-      <Pane
-        name="area-mask"
-        style={{ zIndex: 350 }}
-      >
+      {/* Elegant outside-mask: dims areas outside Pondicherry while keeping the city vivid */}
+      <Pane name="area-mask" style={{ zIndex: 350 }}>
         <Polygon
-          positions={[
-            WORLD_RING,
-            maskHole(selectedArea),
-          ]}
+          positions={[WORLD_RING, BOUNDARY_POSITIONS]}
           pathOptions={{
             stroke: false,
             fill: true,
-            fillColor: '#000000',
-            fillOpacity: 1,
+            fillColor: '#040814',
+            fillOpacity: 0.68,
             fillRule: 'evenodd',
             interactive: false,
             className: 'area-mask',
@@ -440,44 +361,41 @@ export function CrimeMap({
         />
       </Pane>
 
-      {/* Map controls */}
+      {/* Selected locality glowing target */}
+      {selectedAreaTarget && (
+        <CircleMarker
+          center={[selectedAreaTarget.lat, selectedAreaTarget.lng]}
+          radius={26}
+          pathOptions={{
+            color: '#06b6d4',
+            weight: 2.5,
+            dashArray: '4 4',
+            fillColor: '#06b6d4',
+            fillOpacity: 0.22,
+          }}
+          interactive={false}
+        />
+      )}
+
+      {/* Controls */}
       <ZoomControl position="bottomright" />
-      <ScaleControl
-        position="bottomleft"
-        imperial={false}
-      />
+      <ScaleControl position="bottomleft" imperial={false} />
 
-      {/* Map camera and interaction controllers */}
-      <AreaCameraController
-        selectedArea={selectedArea}
-      />
+      {/* Interaction controllers */}
+      <AreaCameraController selectedArea={selectedArea} />
+      <SearchFocusController query={searchQuery} incidents={incidents} />
+      <TapToDismiss onDeselect={onDeselectIncident} />
+      <LocationPicker active={pickingLocation} onPick={onPickLocation} />
 
-      <SearchFocusController
-        query={searchQuery}
-        incidents={incidents}
-      />
-
-      <TapToDismiss
-        onDeselect={onDeselectIncident}
-      />
-
-      <LocationPicker
-        active={pickingLocation}
-        onPick={onPickLocation}
-      />
-
-      {/* Puducherry reference point */}
+      {/* Puducherry reference center beacon */}
       <CircleMarker
-        center={[
-          PUDUCHERRY_CENTER.lat,
-          PUDUCHERRY_CENTER.lng,
-        ]}
+        center={[PUDUCHERRY_CENTER.lat, PUDUCHERRY_CENTER.lng]}
         radius={4}
         pathOptions={{
-          color: '#60a5fa',
+          color: '#38bdf8',
           weight: 2,
-          fillColor: '#60a5fa',
-          fillOpacity: 0.8,
+          fillColor: '#38bdf8',
+          fillOpacity: 0.9,
         }}
         interactive={false}
       />

@@ -10,13 +10,51 @@ const STATUS_COLORS: Record<string, string> = {
   Patrolling: '#22c55e',
 }
 
+/**
+ * Patrol unit icon marker:
+ * - Tabler car icon (<i class="ti ti-car"></i>)
+ * - Blinking red REC dot
+ * - Callsign label (e.g. Guardian-1, Hunter-1, Falcon-1)
+ */
 function patrolIcon(callsign: string, status: string): L.DivIcon {
-  const color = STATUS_COLORS[status] ?? '#94a3b8'
+  const color = STATUS_COLORS[status] ?? '#38bdf8'
+
   return L.divIcon({
     className: 'patrol-marker-wrap',
-    html: `<span class="patrol-marker" style="--patrol-color:${color}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11 5 5h14l2 6v6h-3v-2H6v2H3v-6z"/><circle cx="7.5" cy="15.5" r="1.6" fill="#050a14"/><circle cx="16.5" cy="15.5" r="1.6" fill="#050a14"/></svg><b>${callsign}</b></span>`,
-    iconSize: [54, 24],
-    iconAnchor: [27, 12],
+    html: `
+      <div class="patrol-marker-bubble" style="
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 3px 9px 3px 7px;
+        border-radius: 999px;
+        background: rgba(8, 18, 32, 0.94);
+        border: 1.5px solid ${color};
+        color: #ffffff;
+        font-size: 11px;
+        font-weight: 700;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55);
+        cursor: pointer;
+        user-select: none;
+      ">
+        <i class="ti ti-car" style="font-size: 15px; color: #38bdf8; line-height: 1;"></i>
+        <span style="display: inline-flex; align-items: center; gap: 3px;">
+          <span class="blinking-rec-dot" style="
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: #ef4444;
+            display: inline-block;
+            box-shadow: 0 0 6px #ef4444;
+            animation: recBlink 1s ease-in-out infinite;
+          "></span>
+          <span style="font-size: 9px; font-weight: 800; color: #ef4444; letter-spacing: 0.04em;">REC</span>
+        </span>
+        <b style="color: #ffffff; font-size: 11px; letter-spacing: 0.02em;">${callsign}</b>
+      </div>
+    `,
+    iconSize: [85, 26],
+    iconAnchor: [42, 13],
   })
 }
 
@@ -50,8 +88,11 @@ export function PatrolLayer({ isInside }: PatrolLayerProps = {}) {
             <div className="popup-title">
               {unit.callsign} <span className="text-steel-400">({unit.id})</span>
             </div>
-            <div className="popup-sub">Simulated patrol unit - demo only</div>
-            <div className="popup-row">
+            <div className="popup-sub flex items-center gap-1.5 mt-0.5">
+              <span className="size-2 rounded-full bg-red-500 animate-pulse"></span>
+              <span className="text-red-400 font-bold text-[11px]">LIVE DASHCAM RECORDING</span>
+            </div>
+            <div className="popup-row mt-2">
               <span>Status</span>
               <span style={{ color: STATUS_COLORS[unit.displayStatus] }}>{unit.displayStatus}</span>
             </div>
@@ -67,7 +108,7 @@ export function PatrolLayer({ isInside }: PatrolLayerProps = {}) {
               <span>ETA</span>
               <span>{unit.etaMinutes > 0 ? `${unit.etaMinutes} min` : 'On station'}</span>
             </div>
-            <div className="popup-demo">SIMULATED UNITS - NOT LIVE VEHICLE DATA</div>
+            <div className="popup-demo">SIMULATED PATROL UNIT - CAMERA ONLINE</div>
           </Popup>
         </Marker>
       ))}

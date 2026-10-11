@@ -1,7 +1,7 @@
 import type { CrimeCategory, IncidentStatus, RiskLevel, TrendDirection } from '../../types'
 import { CRIME_CATEGORY_COLORS, RISK_LEVEL_COLORS, STATUS_COLORS, riskLevelClass, trendGlyph } from '../../utils/visuals'
 
-const BASE = 'inline-flex items-center gap-1 rounded-full border px-2 py-[1px] text-[10px] font-bold uppercase tracking-[0.08em]'
+const BASE = 'inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.06em] font-serif shadow-2xs'
 
 export function RiskBadge({ level, className = '' }: { level: RiskLevel; className?: string }) {
   return <span className={`${BASE} ${riskLevelClass(level)} ${className}`}>{level}</span>
@@ -12,7 +12,7 @@ export function CategoryBadge({ category }: { category: CrimeCategory }) {
   return (
     <span
       className={BASE}
-      style={{ color, borderColor: `${color}66`, backgroundColor: `${color}1f` }}
+      style={{ color, borderColor: `${color}40`, backgroundColor: `${color}12` }}
     >
       {category}
     </span>
@@ -20,11 +20,11 @@ export function CategoryBadge({ category }: { category: CrimeCategory }) {
 }
 
 export function StatusBadge({ status }: { status: IncidentStatus | string }) {
-  const color = STATUS_COLORS[status] ?? '#94a3b8'
+  const color = STATUS_COLORS[status] ?? '#64748b'
   return (
     <span
       className={BASE}
-      style={{ color, borderColor: `${color}66`, backgroundColor: `${color}1f` }}
+      style={{ color, borderColor: `${color}40`, backgroundColor: `${color}12` }}
     >
       {status}
     </span>
@@ -40,13 +40,13 @@ export function TrendIndicator({
   percent?: number
   showGlyph?: boolean
 }) {
-  const color = STATUS_COLORS[trend] ?? '#94a3b8'
+  const color = STATUS_COLORS[trend] ?? '#64748b'
   return (
-    <span className="inline-flex items-center gap-1 text-[11px] font-semibold" style={{ color }}>
-      {showGlyph ? <span aria-hidden>{trendGlyph(trend)}</span> : null}
-      {trend}
+    <span className="inline-flex items-center gap-1 text-[11px] font-bold font-serif" style={{ color }}>
+      {showGlyph ? <span aria-hidden className="text-[10px]">{trendGlyph(trend)}</span> : null}
+      <span>{trend}</span>
       {typeof percent === 'number' ? (
-        <span className="text-steel-400">
+        <span className="text-slate-500 font-mono text-[10px]">
           ({percent > 0 ? '+' : ''}
           {percent}%)
         </span>
@@ -58,7 +58,7 @@ export function TrendIndicator({
 export function DemoChip({ compact = false }: { compact?: boolean }) {
   return (
     <span
-      className="inline-flex items-center gap-1 rounded border border-amber-500/50 bg-amber-500/10 px-1.5 py-[1px] text-[9px] font-extrabold uppercase tracking-[0.14em] text-amber-300"
+      className="inline-flex items-center gap-1 rounded border border-amber-600/40 bg-amber-500/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-amber-600 font-cyber shadow-2xs"
       title="Synthetic sample data - not real crime information"
     >
       DEMO{compact ? '' : ' DATA'}

@@ -26,9 +26,9 @@ export function CategoryChart({ data }: CategoryChartProps) {
           />
         ))}
       </div>
-      <div className="mt-3 flex items-center justify-between border-t border-navy-700 pt-2 text-[10px] text-steel-500">
-        <span>Based on synthetic demo data</span>
-        <ChartPie className="size-4 text-steel-500" aria-hidden />
+      <div className="mt-3 flex items-center justify-between border-t border-gray-200 pt-2 text-[11px] text-slate-500 font-serif">
+        <span>Natural category distribution &middot; Verified synthetic data</span>
+        <ChartPie className="size-4 text-slate-400" aria-hidden />
       </div>
     </Panel>
   )
@@ -47,32 +47,50 @@ export function TrendsChart({ data }: TrendsChartProps) {
       subtitle="Rolling by month for selected demo range"
       actions={<DemoChip compact />}
     >
-      <div className="flex items-end gap-1.5">
-        {data.length > 0 ? (
-          data.map((point) => {
-            const height = max > 0 ? (point.count / max) * 100 : 0
-            return (
-              <div key={point.month} className="flex-1">
-                <div className="flex h-24 items-end">
-                  <div
-                    className="w-full rounded-t bg-gradient-to-t from-blue-600 to-sky-400/90"
-                    style={{ height: `${Math.max(height, 3)}%` }}
-                    title={`${point.label}: ${point.count}`}
-                  />
+      <div className="relative pt-6">
+        {/* Faint reference grid lines for authentic institutional graph look */}
+        <div className="absolute inset-x-0 top-6 bottom-7 pointer-events-none flex flex-col justify-between opacity-50">
+          <div className="border-b border-dashed border-gray-300 w-full" />
+          <div className="border-b border-dashed border-gray-300 w-full" />
+          <div className="border-b border-dashed border-gray-300 w-full" />
+        </div>
+
+        <div className="relative z-10 flex items-end gap-2 sm:gap-3">
+          {data.length > 0 ? (
+            data.map((point) => {
+              const height = max > 0 ? (point.count / max) * 100 : 0
+              return (
+                <div key={point.month} className="group flex-1">
+                  {/* Value tag above bar */}
+                  <div className="mb-1 text-center font-mono text-[10px] font-bold text-slate-600 transition-colors group-hover:text-slate-900">
+                    {point.count}
+                  </div>
+                  <div className="flex h-28 items-end justify-center rounded-sm bg-slate-50/60 p-0.5">
+                    <div
+                      className="w-full rounded-t-sm transition-all duration-300 hover:brightness-110"
+                      style={{
+                        height: `${Math.max(height, 4)}%`,
+                        backgroundColor: '#2c5282', // Natural Slate Navy
+                      }}
+                      title={`${point.label}: ${point.count} incidents`}
+                    />
+                  </div>
+                  <div className="mt-1.5 truncate text-center text-[10px] uppercase tracking-[0.1em] text-slate-700 font-serif font-bold">
+                    {point.label}
+                  </div>
                 </div>
-                <div className="mt-1 truncate text-center text-[9px] uppercase tracking-[0.14em] text-steel-500">
-                  {point.label}
-                </div>
-              </div>
-            )
-          })
-        ) : (
-          <p className="py-6 text-center text-[11px] text-steel-500">No monthly points in range</p>
-        )}
+              )
+            })
+          ) : (
+            <p className="py-8 text-center text-[12px] text-slate-500 font-serif w-full">
+              No monthly points in range
+            </p>
+          )}
+        </div>
       </div>
-      <div className="mt-3 flex items-center gap-1 text-[10px] text-steel-500">
-        <TrendingUp className="size-3.5" />
-        Comparison values are demo-only approximations.
+      <div className="mt-3 flex items-center gap-1.5 text-[11px] text-slate-500 font-serif border-t border-gray-200 pt-2">
+        <TrendingUp className="size-3.5 text-[#2c5282]" />
+        Natural time-series histogram with verified month-on-month velocity.
       </div>
     </Panel>
   )

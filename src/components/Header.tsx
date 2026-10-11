@@ -14,7 +14,7 @@ interface HeaderProps {
 }
 
 const CONTROL_CLASS =
-  'h-9 rounded-lg border border-navy-600 bg-navy-800 text-[12px] text-steel-200 outline-none transition-colors hover:border-navy-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/40'
+  'h-9 rounded-lg border border-gray-400 bg-white text-[13px] text-slate-900 outline-none transition-colors hover:border-gray-500 focus:border-gray-600 focus:ring-1 focus:ring-gray-400 font-sans shadow-2xs'
 
 export function Header({
   area,
@@ -27,29 +27,62 @@ export function Header({
   compact = false,
 }: HeaderProps) {
   return (
-    <header className="border-b border-navy-700 bg-navy-900 px-3 py-3 sm:px-4">
-      <div className="flex items-center gap-3">
+    <header
+      className="border-b px-3 py-3 sm:px-4 font-sans transition-colors duration-250"
+      style={{
+        backgroundColor: 'var(--header-bg)',
+        borderColor: 'var(--header-border)',
+      }}
+    >
+      <div className="flex items-center gap-2.5">
+        <div className="relative shrink-0">
+          <div className="absolute -inset-1 rounded-full bg-amber-500/20 blur-xs" />
+          <img
+            src="/pp-logo-2.webp"
+            alt="Puducherry Police Emblem"
+            className="relative size-9 object-contain drop-shadow-[0_0_8px_rgba(217,119,6,0.5)]"
+          />
+        </div>
         <div className="min-w-0 flex-1">
-          <h1 className="truncate text-[14px] font-semibold leading-tight tracking-wide text-white sm:text-[15px]">
+          <h1
+            className="truncate text-[15px] font-bold leading-tight tracking-wider font-sans sm:text-[16px] transition-colors"
+            style={{ color: 'var(--text-main)' }}
+          >
             Puducherry Crime Intelligence
           </h1>
-          <p className="mt-0.5 flex items-center gap-1 truncate text-[11px] text-steel-400">
-            <MapPin className="size-3 shrink-0 text-blue-400" aria-hidden />
-            Viewing: <span className="font-semibold text-steel-200">{area}</span>
+          <p
+            className="mt-0.5 flex items-center gap-1 truncate text-[12px] transition-colors"
+            style={{ color: 'var(--text-muted)' }}
+          >
+            <MapPin className="size-3.5 shrink-0 text-amber-500" aria-hidden />
+            Viewing:{' '}
+            <span
+              className="font-bold uppercase tracking-wider transition-colors"
+              style={{ color: 'var(--text-main)' }}
+            >
+              {area}
+            </span>
           </p>
         </div>
 
-        <div className="hidden items-center gap-1 rounded-lg border border-navy-600 bg-navy-800 p-2 text-steel-400 md:flex">
+        <div
+          className="hidden items-center gap-1 rounded-lg border p-2 md:flex transition-colors"
+          style={{
+            borderColor: 'var(--header-border)',
+            backgroundColor: 'var(--header-bg)',
+            color: 'var(--text-muted)',
+          }}
+        >
           <Bell className="size-4" aria-hidden />
         </div>
 
-        <div className="flex shrink-0 items-center gap-2 rounded-lg border border-navy-600 bg-navy-800 py-1 pl-1 pr-1 sm:pr-3">
-          <span className="grid size-7 place-items-center rounded-md bg-gradient-to-br from-blue-500 to-blue-700 text-[11px] font-bold text-white">
+        <div className="flex shrink-0 items-center gap-2 rounded-lg border border-gray-400 bg-white py-1 pl-1 pr-1 sm:pr-3 shadow-2xs">
+          <span className="grid size-7 place-items-center rounded-md bg-gradient-to-br from-[#1e3a8a] to-[#0b1a30] text-[11px] font-bold text-amber-300 font-sans">
             DA
           </span>
-          <span className="hidden leading-tight sm:block">
-            <span className="block text-[11px] font-semibold text-steel-100">Demo Analyst</span>
-            <span className="block text-[10px] text-steel-500">Analysis Cell</span>
+          <span className="hidden leading-tight sm:block font-sans">
+            <span className="block text-[12px] font-bold text-slate-900">Demo Analyst</span>
+            <span className="block text-[10px] text-slate-600 font-medium">Analysis Cell</span>
           </span>
         </div>
       </div>
@@ -92,24 +125,24 @@ export function Header({
               />
             </label>
 
-            <div className="flex w-full items-center gap-1.5 rounded-lg border border-navy-600 bg-navy-800 px-2.5 py-1.5 sm:w-auto">
-              <Calendar className="size-3.5 shrink-0 text-steel-400" aria-hidden />
+            <div className="flex w-full items-center gap-1.5 rounded-lg border border-gray-400 bg-white px-2.5 py-1.5 sm:w-auto shadow-2xs font-sans">
+              <Calendar className="size-3.5 shrink-0 text-slate-500" aria-hidden />
               <input
                 type="date"
                 value={dateRange.from}
                 max={dateRange.to}
                 onChange={(event) => onDateRangeChange({ ...dateRange, from: event.target.value })}
                 aria-label="Date range start"
-                className="min-w-0 flex-1 bg-transparent text-[11px] text-steel-200 outline-none sm:w-[7.6rem] sm:flex-none"
+                className="min-w-0 flex-1 bg-transparent text-[12px] text-slate-900 outline-none sm:w-[7.6rem] sm:flex-none font-sans font-semibold"
               />
-              <span className="text-[11px] text-steel-500">→</span>
+              <span className="text-[12px] text-slate-400">→</span>
               <input
                 type="date"
                 value={dateRange.to}
                 min={dateRange.from}
                 onChange={(event) => onDateRangeChange({ ...dateRange, to: event.target.value })}
                 aria-label="Date range end"
-                className="min-w-0 flex-1 bg-transparent text-[11px] text-steel-200 outline-none sm:w-[7.6rem] sm:flex-none"
+                className="min-w-0 flex-1 bg-transparent text-[12px] text-slate-900 outline-none sm:w-[7.6rem] sm:flex-none font-sans font-semibold"
               />
             </div>
           </>
