@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react'
 import { Bell, LoaderCircle, Menu, RefreshCw } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { buildAnalysisWindow, buildRiskForecast, computeRiskZones } from './analytics/risk'
@@ -612,6 +613,7 @@ export default function App() {
           existingIncidentsCount={incidents.length}
         />
       </div>
+      <Analytics />
     </PatrolProvider>
   )
 }
