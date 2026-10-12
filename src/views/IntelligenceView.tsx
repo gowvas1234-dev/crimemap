@@ -78,15 +78,15 @@ export function IntelligenceView({
         <DemoChip />
       </header>
 
-      <div className="grid gap-3 xl:grid-cols-[1.4fr_1fr] font-serif">
-        <section className="flex flex-col rounded-xl border border-slate-200/90 bg-white shadow-[0_10px_30px_rgba(0,0,0,0.25)] text-slate-900 font-serif">
-          <header className="flex items-center gap-2 border-b border-slate-100 px-4 py-3">
-            <span className="grid size-6 place-items-center rounded bg-blue-600/10 text-blue-700">
+      <div className="grid gap-3 xl:grid-cols-[1.4fr_1fr] font-sans">
+        <section className="flex flex-col rounded-xl border border-navy-700 bg-navy-900 text-white font-sans">
+          <header className="flex items-center gap-2 border-b border-navy-700 px-4 py-3">
+            <span className="grid size-6 place-items-center rounded bg-blue-600/20 text-blue-300">
               <Brain className="size-4" aria-hidden />
             </span>
             <div>
-              <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-blue-950 font-serif">Ask Assistant</p>
-              <p className="text-[10px] text-slate-500 font-serif">e.g. "Which area needs patrols now?"</p>
+              <p className="text-[12px] font-bold uppercase tracking-[0.14em] text-white font-sans">Ask Assistant</p>
+              <p className="text-[10px] text-steel-500 font-sans">e.g. "Which area needs patrols now?"</p>
             </div>
           </header>
           <div className="flex flex-1 flex-col gap-2.5 p-4">
@@ -95,15 +95,15 @@ export function IntelligenceView({
               onChange={(e) => setQuestion(e.target.value)}
               rows={3}
               placeholder="Ask about risk zones, trends, hotspots, recommendations..."
-              className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-[13px] text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none font-serif"
+              className="w-full rounded-lg border border-navy-600 bg-navy-950 px-3 py-2 text-[13px] text-steel-100 placeholder:text-steel-600 focus:border-blue-500 focus:outline-none font-sans"
             />
-            <div className="flex flex-wrap gap-1.5 font-serif">
+            <div className="flex flex-wrap gap-1.5 font-sans">
               {SUGGESTED_PROMPTS.map((prompt) => (
                 <button
                   key={prompt}
                   type="button"
                   onClick={() => handleAsk(prompt)}
-                  className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-[11px] text-slate-700 hover:border-blue-500 hover:text-blue-700 font-serif"
+                  className="rounded-full border border-navy-600 bg-navy-800 px-2.5 py-1 text-[11px] text-steel-300 hover:border-blue-500/60 hover:text-blue-300 font-sans"
                 >
                   {prompt}
                 </button>
@@ -113,23 +113,23 @@ export function IntelligenceView({
               type="button"
               onClick={() => handleAsk(question)}
               disabled={loading}
-              className="mt-auto inline-flex items-center gap-2 self-start rounded-lg bg-blue-600 px-4 py-2 text-[12px] font-bold text-white hover:bg-blue-700 disabled:opacity-60 shadow-xs"
+              className="mt-auto inline-flex items-center gap-2 self-start rounded-lg bg-blue-600 px-4 py-2 text-[12px] font-bold text-white hover:bg-blue-500 disabled:opacity-60 shadow-xs"
             >
               {loading ? 'Thinking...' : 'Ask'}
               <Sparkles className="size-4" />
             </button>
           </div>
           {answer ? (
-            <div className="border-t border-slate-100 px-4 py-3 font-serif">
-              <p className="text-[13px] leading-relaxed text-slate-800 whitespace-pre-wrap font-serif">
+            <div className="border-t border-navy-700 px-4 py-3 font-sans">
+              <p className="text-[13px] leading-relaxed text-steel-100 whitespace-pre-wrap font-sans">
                 {answer}
               </p>
               {sources.length > 0 ? (
-                <div className="mt-2 border-t border-slate-100 pt-2 font-serif">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-slate-500">
+                <div className="mt-2 border-t border-navy-700 pt-2 font-sans">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-steel-500">
                     Sources
                   </p>
-                  <ul className="mt-1 space-y-0.5 text-[11px] text-slate-600">
+                  <ul className="mt-1 space-y-0.5 text-[11px] text-steel-400">
                     {sources.map((s) => (
                       <li key={s}>• {s}</li>
                     ))}

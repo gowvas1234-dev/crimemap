@@ -1,19 +1,29 @@
-import { LoaderCircle, RefreshCw } from 'lucide-react'
+import { Bell, LoaderCircle, Menu, RefreshCw } from 'lucide-react'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { buildAnalysisWindow, buildRiskForecast, computeRiskZones } from './analytics/risk'
 import { detectChanges } from './analytics/changes'
 import { buildDispatchPlan, buildRecommendation } from './analytics/recommend'
 import { buildPatrolPlan } from './analytics/patrol'
 import { AnimatedBackground } from './components/AnimatedBackground'
+import { CpoBroadcastToast } from './components/CpoBroadcastToast'
+import { CpoNotificationModal } from './components/CpoNotificationModal'
+import { CriticalAlertButton } from './components/CriticalAlertButton'
+import { CriticalSituationModal } from './components/CriticalSituationModal'
 import { DemoBanner } from './components/DemoBanner'
 import { Header } from './components/Header'
 import { OfficialGovBanner } from './components/OfficialGovBanner'
-import { TopNav } from './components/TopNav'
+import { ReportCrimeModal } from './components/ReportCrimeModal'
+import { SidebarNav } from './components/SidebarNav'
+import { NAV_ITEMS } from './data/navigation'
 import { DEMO_AREAS } from './data/areas'
 import { PatrolProvider } from './patrol/PatrolContext'
 import { crimeDataSource } from './services/crimeApi'
+import { buildCPONotification, getInitialCPONotifications } from './utils/cpoBroadcast'
+import { playCpoAlertChirp } from './utils/audioAlert'
 import type {
   AppView,
+  AuthUser,
+  CPONotification,
   CrimeFilterState,
   CrimeIncident,
   DateRange,
@@ -39,6 +49,7 @@ import {
 import { DashboardView } from './views/DashboardView'
 import { HotspotsView } from './views/HotspotsView'
 import { IntelligenceView } from './views/IntelligenceView'
+import { LoginView } from './views/LoginView'
 import { MapView } from './views/MapView'
 import { PatrolView } from './views/PatrolView'
 import { PredictiveRiskView } from './views/PredictiveRiskView'
@@ -82,8 +93,29 @@ export default function App() {
   const [data, setData] = useState<LoadState | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [reloadKey, setReloadKey] = useState(0)
+  const [user, setUser] = useState<AuthUser | null>(null)
   const [selection, setSelection] = useState<ZoneSelection | null>(null)
   const [generatedAt] = useState(() => new Date().toISOString())
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [cpoNotifications, setCpoNotifications] = useState<CPONotification[]>(() =>
+    getInitialCPONotifications(),
+  )
+  const [latestBroadcast, setLatestBroadcast] = useState<CPONotification | null>(null)
+  const [cpoModalOpen, setCpoModalOpen] = useState(false)
+  const [selectedCpoNotification, setSelectedCpoNotification] = useState<CPONotification | null>(null)
+  const [reportCrimeModalOpen, setReportCrimeModalOpen] = useState(false)
+  const [criticalModalOpen, setCriticalModalOpen] = useState(false)
+
+  const handleLogin = useCallback((loggedInUser: AuthUser) => {
+    setUser(loggedInUser)
+  }, [])
+
+  const handleLogout = useCallback(() => {
+    try {
+      localStorage.removeItem('crimemap_auth')
+    } catch {}
+    setUser(null)
+  }, [])
 
   useEffect(() => {
     try {
@@ -240,6 +272,13 @@ export default function App() {
       if (from === current.dateRange.from && to === current.dateRange.to) return current
       return { ...current, dateRange: { from, to } }
     })
+
+    // Instant real-time broadcast: dispatch alert to ALL CPOs across all 11 police stations
+    const broadcast = buildCPONotification(created)
+    setCpoNotifications((current) => [broadcast, ...current])
+    setLatestBroadcast(broadcast)
+    setSelectedCpoNotification(broadcast)
+    playCpoAlertChirp()
   }, [])
 
   const navigate = useCallback((next: AppView) => {
@@ -258,6 +297,16 @@ export default function App() {
   const selectZoneObject = useCallback((zone: RiskZone) => {
     setSelection({ id: zone.id, area: zone.area })
   }, [])
+
+  if (!user) {
+    return (
+      <LoginView
+        onLogin={handleLogin}
+        theme={theme}
+        onToggleTheme={toggleTheme}
+      />
+    )
+  }
 
   if (error) {
     return (
@@ -298,7 +347,14 @@ export default function App() {
   const renderView = () => {
     switch (view) {
       case 'dashboard':
-        return <DashboardView stats={stats} zones={visibleZones} onNavigate={navigate} />
+        return (
+          <DashboardView
+            stats={stats}
+            zones={visibleZones}
+            onNavigate={navigate}
+            onOpenReportCrime={() => setReportCrimeModalOpen(true)}
+          />
+        )
       case 'hotspots':
         return (
           <HotspotsView
@@ -387,7 +443,7 @@ export default function App() {
   return (
     <PatrolProvider plan={patrolPlan}>
       <div
-        className="relative flex min-h-dvh flex-col transition-colors duration-250 overflow-x-hidden"
+        className="relative flex h-dvh w-full flex-col transition-colors duration-250 overflow-hidden"
         style={{
           backgroundColor: 'var(--bg-app)',
           color: 'var(--text-main)',
@@ -398,7 +454,7 @@ export default function App() {
 
         {/* Central Tactical Dashboard Shell with Khaki Police Theme */}
         <div
-          className="relative z-10 flex min-h-dvh w-full max-w-full lg:max-w-[1700px] xl:max-w-[1920px] mx-auto flex-col backdrop-blur-md shadow-[0_0_90px_rgba(0,0,0,0.8)] ring-1 transition-colors duration-250"
+          className="relative z-10 flex h-full w-full max-w-full lg:max-w-[1700px] xl:max-w-[1920px] mx-auto flex-col backdrop-blur-md shadow-[0_0_90px_rgba(0,0,0,0.8)] ring-1 transition-colors duration-250 overflow-hidden"
           style={{
             backgroundColor: 'var(--bg-shell)',
             borderColor: 'var(--border-shell)',
@@ -425,42 +481,136 @@ export default function App() {
             </div>
           </div>
 
-          <div className="relative z-10 flex min-w-0 flex-1 flex-col">
+          <div className="relative z-10 flex min-w-0 flex-1 flex-col h-full overflow-hidden">
             {/* Precision Gray Command Trim Line */}
             <div className="h-[2px] w-full shrink-0 bg-gray-500 shadow-xs" />
 
-            <OfficialGovBanner />
-            <DemoBanner />
-            <TopNav
-              activeView={view}
-              onNavigate={navigate}
-              theme={theme}
-              onToggleTheme={toggleTheme}
-            />
-            {view === 'map' ? (
-              <Header
-                area={filters.area}
-                areas={areaOptions}
-                onAreaChange={(area) => setFilters((current) => ({ ...current, area }))}
-                searchQuery={filters.searchQuery}
-                onSearchChange={(searchQuery) =>
-                  setFilters((current) => ({ ...current, searchQuery }))
-                }
-                dateRange={filters.dateRange}
-                onDateRangeChange={(dateRange) =>
-                  setFilters((current) => ({ ...current, dateRange }))
-                }
-                compact={false}
-              />
-            ) : null}
+            <div className="shrink-0">
+              <OfficialGovBanner onOpenCriticalAlert={() => setCriticalModalOpen(true)} />
+              <DemoBanner />
+            </div>
 
-            <div className="flex flex-col flex-1 min-h-[580px] h-[calc(100dvh-175px)]">
-              <main className="relative flex flex-col min-w-0 flex-1 h-full w-full" key={view}>
-                {renderView()}
-              </main>
+            {/* Main Layout: Fixed Unscrolled Left Sidebar + Scrollable Right Content Canvas */}
+            <div className="flex flex-1 min-h-0 w-full overflow-hidden">
+              {/* Left Side Navigation: Fixed & Unscrolled */}
+              <SidebarNav
+                activeView={view}
+                onNavigate={navigate}
+                theme={theme}
+                onToggleTheme={toggleTheme}
+                user={user}
+                onLogout={handleLogout}
+                mobileOpen={mobileMenuOpen}
+                onMobileClose={() => setMobileMenuOpen(false)}
+                onOpenReportCrime={() => setReportCrimeModalOpen(true)}
+                onOpenCpoDispatch={() => setCpoModalOpen(true)}
+                onOpenCriticalAlert={() => setCriticalModalOpen(true)}
+                unreadCpoAlertsCount={cpoNotifications.filter((n) => !n.read).length}
+              />
+
+              {/* Right Content Area */}
+              <div className="flex flex-col flex-1 min-w-0 h-full overflow-hidden">
+                {/* Mobile Top Bar (Only visible on screens < lg) */}
+                <div className="lg:hidden shrink-0 flex items-center justify-between border-b px-3 py-2 bg-[#081220] border-[#1e2f47]">
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setMobileMenuOpen(true)}
+                      className="rounded-lg p-1.5 text-steel-200 hover:text-white hover:bg-navy-800 border border-navy-700 cursor-pointer"
+                      aria-label="Open navigation menu"
+                    >
+                      <Menu className="size-5" />
+                    </button>
+                    <div className="flex items-center gap-2">
+                      <img src="/pp-logo-2.webp" alt="Emblem" className="size-6 object-contain" />
+                      <span className="text-[14px] font-black text-white">CRIMEMAP</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <CriticalAlertButton onClick={() => setCriticalModalOpen(true)} compact />
+                    <button
+                      type="button"
+                      onClick={() => setCpoModalOpen(true)}
+                      className="inline-flex items-center gap-1 rounded bg-blue-600/30 border border-blue-400 px-2 py-1 text-[11px] font-bold text-sky-300 cursor-pointer"
+                      title="CPO Emergency Broadcast"
+                    >
+                      <Bell className="size-3 text-amber-300" />
+                      <span>16 CPOs</span>
+                    </button>
+                    <span className="text-[11px] font-bold text-amber-400">
+                      {NAV_ITEMS.find((item) => item.id === view)?.label}
+                    </span>
+                  </div>
+                </div>
+
+                {view === 'map' ? (
+                  <div className="shrink-0">
+                    <Header
+                      area={filters.area}
+                      areas={areaOptions}
+                      onAreaChange={(area) => setFilters((current) => ({ ...current, area }))}
+                      searchQuery={filters.searchQuery}
+                      onSearchChange={(searchQuery) =>
+                        setFilters((current) => ({ ...current, searchQuery }))
+                      }
+                      dateRange={filters.dateRange}
+                      onDateRangeChange={(dateRange) =>
+                        setFilters((current) => ({ ...current, dateRange }))
+                      }
+                      compact={false}
+                    />
+                  </div>
+                ) : null}
+
+                <main
+                  className={`relative flex flex-col min-w-0 flex-1 h-full w-full ${
+                    view === 'map' ? 'overflow-hidden' : 'overflow-y-auto scroll-thin'
+                  }`}
+                  key={view}
+                >
+                  {renderView()}
+                </main>
+              </div>
             </div>
           </div>
         </div>
+
+        {/* Real-Time Tactical Alert Toast when any crime is added and CPOs are notified */}
+        <CpoBroadcastToast
+          notification={latestBroadcast}
+          onOpenDetails={(notif) => {
+            setSelectedCpoNotification(notif)
+            setCpoModalOpen(true)
+            setLatestBroadcast(null)
+          }}
+          onDismiss={() => setLatestBroadcast(null)}
+        />
+
+        {/* Central CPO Dispatch & Notification Modal */}
+        <CpoNotificationModal
+          isOpen={cpoModalOpen}
+          notification={selectedCpoNotification}
+          notificationsList={cpoNotifications}
+          onSelectNotification={(notif) => setSelectedCpoNotification(notif)}
+          onClose={() => setCpoModalOpen(false)}
+        />
+
+        {/* Quick Report Crime FIR Modal */}
+        <ReportCrimeModal
+          isOpen={reportCrimeModalOpen}
+          onClose={() => setReportCrimeModalOpen(false)}
+          onSave={createIncident}
+          existingIncidentsCount={incidents.length}
+        />
+
+        {/* Critical Situation Alert Dispatch Modal */}
+        <CriticalSituationModal
+          isOpen={criticalModalOpen}
+          onClose={() => setCriticalModalOpen(false)}
+          onDispatch={createIncident}
+          existingIncidentsCount={incidents.length}
+        />
       </div>
     </PatrolProvider>
   )

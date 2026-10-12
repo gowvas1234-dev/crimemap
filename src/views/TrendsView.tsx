@@ -24,7 +24,7 @@ export function TrendsView({ monthly, categoryStats, areaStats, statusStats, zon
         <TrendsChart data={monthly} />
         <CategoryChart data={categoryStats} />
       </div>
-      <div className="grid gap-3 lg:grid-cols-3 lg:gap-4 font-serif">
+      <div className="grid gap-3 lg:grid-cols-3 lg:gap-4 font-sans">
         <Panel title="Top areas" subtitle="Filtered demo incidents by locality">
           <div className="space-y-2">
             {areaStats.map((area) => {
@@ -32,19 +32,19 @@ export function TrendsView({ monthly, categoryStats, areaStats, statusStats, zon
               return (
                 <div key={area.area} className="space-y-1">
                   <div className="flex items-center justify-between gap-3 text-[12px]">
-                    <span className="truncate text-slate-800 font-semibold">{area.area}</span>
-                    <span className="font-mono text-[11px] text-slate-900 font-bold">{area.count}</span>
+                    <span className="truncate text-steel-200 font-semibold">{area.area}</span>
+                    <span className="font-mono text-[11px] text-white font-bold">{area.count}</span>
                   </div>
-                  <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 border border-slate-200/60">
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-navy-950 border border-navy-700">
                     <div
                       className="h-full rounded-full transition-all duration-300"
-                      style={{ width: `${Math.max(width, 3)}%`, backgroundColor: '#2c5282' }}
+                      style={{ width: `${Math.max(width, 3)}%`, backgroundColor: '#38bdf8' }}
                     />
                   </div>
                 </div>
               )
             })}
-            {areaStats.length === 0 ? <p className="text-[11px] text-slate-400">No areas found</p> : null}
+            {areaStats.length === 0 ? <p className="text-[11px] text-steel-400 font-medium">No areas found</p> : null}
           </div>
         </Panel>
 
@@ -54,20 +54,20 @@ export function TrendsView({ monthly, categoryStats, areaStats, statusStats, zon
               const width = (item.count / maxStatus) * 100
               const statusColor =
                 item.status === 'Closed'
-                  ? '#2d6a4f' // Forest Sage
+                  ? '#10b981' // Bright Emerald
                   : item.status === 'Under Investigation'
-                  ? '#b45309' // Warm Ochre
-                  : '#2c5282' // Slate Navy
+                  ? '#f59e0b' // Amber
+                  : '#38bdf8' // Sky Blue
               return (
                 <div key={item.status} className="space-y-1">
                   <div className="flex items-center justify-between gap-3 text-[12px]">
-                    <span className="text-slate-800 font-semibold flex items-center gap-1.5">
+                    <span className="text-steel-200 font-semibold flex items-center gap-1.5">
                       <span className="size-2 rounded-full" style={{ backgroundColor: statusColor }} />
                       {item.status}
                     </span>
-                    <span className="font-mono text-[11px] text-slate-900 font-bold">{item.count}</span>
+                    <span className="font-mono text-[11px] text-white font-bold">{item.count}</span>
                   </div>
-                  <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 border border-slate-200/60">
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-navy-950 border border-navy-700">
                     <div
                       className="h-full rounded-full transition-all duration-300"
                       style={{ width: `${Math.max(width, 3)}%`, backgroundColor: statusColor }}
@@ -87,13 +87,13 @@ export function TrendsView({ monthly, categoryStats, areaStats, statusStats, zon
               return (
                 <div key={level} className="space-y-1">
                   <div className="flex items-center justify-between gap-3 text-[12px]">
-                    <span className="inline-flex items-center gap-1.5 text-slate-800 font-semibold">
+                    <span className="inline-flex items-center gap-1.5 text-steel-200 font-semibold">
                       <span className="size-2.5 rounded-full" style={{ backgroundColor: color }} />
                       {level}
                     </span>
-                    <span className="font-mono text-[11px] text-slate-900 font-bold">{count} zones</span>
+                    <span className="font-mono text-[11px] text-white font-bold">{count} zones</span>
                   </div>
-                  <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 border border-slate-200/60">
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-navy-950 border border-navy-700">
                     <div
                       className="h-full rounded-full transition-all duration-300"
                       style={{ width: `${Math.max(width, 3)}%`, backgroundColor: color }}
@@ -103,7 +103,7 @@ export function TrendsView({ monthly, categoryStats, areaStats, statusStats, zon
               )
             })}
           </div>
-          <div className="mt-3 flex items-center justify-between text-[11px] text-slate-500 border-t border-gray-200 pt-2">
+          <div className="mt-3 flex items-center justify-between text-[11px] text-steel-400 font-medium border-t border-navy-700 pt-2">
             <span>Dynamic Risk Classifier</span>
             <DemoChip compact />
           </div>

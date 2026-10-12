@@ -34,7 +34,7 @@ export function StatTile({ label, value, hint, color = '#38bdf8', icon }: StatTi
       </div>
       {hint ? (
         <div
-          className="mt-1 text-[11px] leading-tight font-medium transition-colors"
+          className="mt-1 text-[11px] leading-tight font-semibold transition-colors"
           style={{ color: 'var(--card-text-muted)' }}
         >
           {hint}
@@ -57,13 +57,13 @@ export function BarRow({ label, value, max, color, meta }: BarRowProps) {
   return (
     <div className="py-2">
       <div className="flex items-baseline justify-between gap-3 text-[13px]">
-        <span className="truncate text-slate-800 font-semibold">{label}</span>
-        <span className="shrink-0 font-bold text-slate-900 font-mono">
+        <span className="truncate text-steel-100 font-bold">{label}</span>
+        <span className="shrink-0 font-bold text-white font-mono">
           {value}
-          {meta ? <span className="ml-1 text-slate-500 font-normal font-sans text-[12px]">({meta})</span> : null}
+          {meta ? <span className="ml-1 text-steel-300 font-medium font-sans text-[12px]">({meta})</span> : null}
         </span>
       </div>
-      <div className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-slate-100 border border-slate-200/50">
+      <div className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-navy-950 border border-navy-700">
         <div
           className="h-full rounded-full transition-[width] duration-300"
           style={{ width: `${width}%`, backgroundColor: color }}

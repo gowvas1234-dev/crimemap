@@ -26,14 +26,14 @@ export function Panel({ title, subtitle, actions, children, className = '', body
       >
         <div className="min-w-0">
           <h2
-            className="text-[14px] font-bold uppercase tracking-[0.14em] font-cyber transition-colors"
+            className="text-[16px] font-semibold tracking-tight font-sans transition-colors"
             style={{ color: 'var(--card-text-title)' }}
           >
             {title}
           </h2>
           {subtitle ? (
             <p
-              className="mt-0.5 text-[12px] font-medium transition-colors"
+              className="mt-0.5 text-[12px] font-semibold transition-colors"
               style={{ color: 'var(--card-text-muted)' }}
             >
               {subtitle}

@@ -202,27 +202,27 @@ export function ReportsView({
       </div>
 
       <Panel title="Exports" subtitle="CSV files respect the active filters">
-        <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3 font-serif">
+        <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3 font-sans">
           {exportButtons.map((button) => (
             <button
               key={button.label}
               type="button"
               onClick={button.onClick}
-              className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50/80 px-3.5 py-2.5 text-left transition-colors hover:border-blue-500 hover:bg-blue-50/50 shadow-xs"
+              className="flex items-center justify-between rounded-xl border border-navy-700 bg-navy-950/80 px-3.5 py-2.5 text-left transition-colors hover:border-sky-500 hover:bg-navy-800 shadow-sm cursor-pointer"
             >
-              <span className="text-[13px] font-bold text-slate-900">{button.label}</span>
-              <span className="text-[10px] text-slate-500 font-mono font-semibold">{button.hint}</span>
+              <span className="text-[13px] font-bold text-white">{button.label}</span>
+              <span className="text-[10px] text-sky-400 font-mono font-semibold">{button.hint}</span>
             </button>
           ))}
         </div>
       </Panel>
 
       <Panel title="Top categories" subtitle="Share of filtered incidents">
-        <ul className="divide-y divide-slate-100 font-serif">
+        <ul className="divide-y divide-navy-700 font-sans">
           {categoryStats.slice(0, 6).map((entry) => (
             <li key={entry.category} className="flex items-center justify-between py-2 first:pt-0 last:pb-0">
-              <span className="text-[13px] font-bold text-slate-900">{entry.category}</span>
-              <span className="font-mono text-[11px] text-slate-600 font-semibold">
+              <span className="text-[13px] font-bold text-white">{entry.category}</span>
+              <span className="font-mono text-[11px] text-steel-300 font-semibold">
                 {entry.count} ({entry.share}%)
               </span>
             </li>

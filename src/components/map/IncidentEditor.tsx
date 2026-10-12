@@ -16,7 +16,7 @@ interface IncidentEditorProps {
 }
 
 const FIELD_CLASS =
-  'h-10 w-full rounded-lg border border-slate-300 bg-slate-50 px-3 text-[13px] text-slate-900 outline-none transition-colors focus:border-blue-600 focus:ring-1 focus:ring-blue-600/40 font-serif'
+  'h-10 w-full rounded-lg border border-navy-700 bg-navy-900/90 px-3 text-[13px] text-white outline-none transition-colors focus:border-blue-500 focus:ring-1 focus:ring-blue-500/40 font-sans'
 
 /** ISO timestamp -> value usable by <input type="datetime-local">. */
 function toLocalInput(iso: string): string {
@@ -130,7 +130,7 @@ export function IncidentEditor({
           type="button"
           onClick={onCancel}
           aria-label="Cancel editing"
-          className="shrink-0 rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+          className="shrink-0 rounded p-1 text-steel-400 hover:bg-navy-800 hover:text-white cursor-pointer"
         >
           <X className="size-4" />
         </button>

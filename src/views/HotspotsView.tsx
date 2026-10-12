@@ -50,7 +50,7 @@ export function HotspotsView({
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <DemoChip />
-          <span className="rounded-lg border border-gray-400 bg-white px-3 py-2 text-[12px] font-bold text-slate-800 shadow-2xs font-serif">
+          <span className="rounded-lg border border-navy-700 bg-navy-800 px-3 py-2 text-[12px] font-bold text-steel-200 shadow-2xs font-sans">
             {sorted.length} active zones
           </span>
         </div>

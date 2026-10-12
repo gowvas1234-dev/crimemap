@@ -35,7 +35,7 @@ export function IncidentSheet({
 
   return (
     <section
-      className={`incident-sheet-in pointer-events-auto scroll-thin absolute bottom-0 z-[1300] overflow-y-auto border-t border-slate-200 bg-white shadow-[0_18px_50px_rgba(0,0,0,0.35)] font-sans text-slate-900 transition-[border-radius] duration-200 ${
+      className={`incident-sheet-in pointer-events-auto scroll-thin absolute bottom-0 z-[1300] overflow-y-auto border-t border-navy-600 bg-navy-900/97 shadow-[0_18px_50px_rgba(0,0,0,0.6)] backdrop-blur-sm font-sans text-white transition-[border-radius] duration-200 ${
         expanded
           ? 'inset-x-0 top-0 rounded-none'
           : 'inset-x-0 bottom-0 max-h-[75%] rounded-t-3xl md:inset-x-auto md:bottom-3 md:right-3 md:w-[390px] md:max-h-[85vh] md:rounded-2xl md:border'
@@ -48,7 +48,7 @@ export function IncidentSheet({
         aria-label={expanded ? 'Collapse incident details' : 'Expand incident details'}
         className="mx-auto mt-2 flex h-6 w-12 items-center justify-center rounded-full"
       >
-        <span className="h-1 w-9 rounded-full bg-slate-300 transition-colors hover:bg-slate-400" aria-hidden />
+        <span className="h-1 w-9 rounded-full bg-navy-500 transition-colors hover:bg-navy-400" aria-hidden />
       </button>
 
       <header className="flex items-start justify-between gap-2 px-4 pb-2 pt-1 font-sans">
@@ -56,7 +56,7 @@ export function IncidentSheet({
           <div className="flex flex-wrap items-center gap-2">
             {/* 32px shape & severity badge mirroring the map marker */}
             <span
-              className="inline-flex size-6 shrink-0 items-center justify-center rounded-full border border-white shadow-xs text-white"
+              className="inline-flex size-6 shrink-0 items-center justify-center rounded-full border border-white/40 shadow-xs text-white"
               style={{ backgroundColor: severityColor }}
               title={`${incident.category} (${severity} severity)`}
             >
@@ -79,7 +79,7 @@ export function IncidentSheet({
             )}
           </div>
 
-          <h2 className="mt-2 truncate text-[16px] font-extrabold text-slate-900 font-sans">
+          <h2 className="mt-2 truncate text-[16px] font-extrabold text-white font-sans">
             {incident.id} &middot; {incident.area}
           </h2>
         </div>
@@ -90,7 +90,7 @@ export function IncidentSheet({
             onClick={() => setExpanded((current) => !current)}
             aria-label={expanded ? 'Collapse incident details' : 'Expand incident details'}
             title={expanded ? 'Collapse' : 'Expand to full screen'}
-            className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
+            className="rounded-lg p-1.5 text-steel-400 transition-colors hover:bg-navy-700 hover:text-white"
           >
             {expanded ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
           </button>
@@ -98,7 +98,7 @@ export function IncidentSheet({
             type="button"
             onClick={onClose}
             aria-label="Close incident details"
-            className="shrink-0 rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
+            className="shrink-0 rounded-lg p-1.5 text-steel-400 transition-colors hover:bg-navy-700 hover:text-white"
           >
             <X className="size-4" />
           </button>
@@ -183,47 +183,47 @@ export function IncidentSheet({
         )}
 
         {/* INCIDENT SPECIFICATIONS */}
-        <div className="rounded-xl border border-slate-200 bg-slate-50/80 px-3 py-1 shadow-xs font-sans">
-          <div className="flex items-center justify-between gap-3 border-b border-dashed border-slate-200 py-2 text-[12px]">
-            <span className="shrink-0 text-slate-500 font-medium">Crime Type</span>
-            <span className="text-right font-bold text-slate-900 flex items-center gap-1.5">
-              <i className={`ti ti-${iconName} text-sm text-slate-700`}></i>
+        <div className="rounded-xl border border-navy-600 bg-navy-800/80 px-3 py-1 shadow-xs font-sans">
+          <div className="flex items-center justify-between gap-3 border-b border-dashed border-navy-600/70 py-2 text-[12px]">
+            <span className="shrink-0 text-steel-400 font-medium">Crime Type</span>
+            <span className="text-right font-bold text-white flex items-center gap-1.5">
+              <i className={`ti ti-${iconName} text-sm text-steel-300`}></i>
               {incident.category}
             </span>
           </div>
 
-          <div className="flex items-center justify-between gap-3 border-b border-dashed border-slate-200 py-2 text-[12px]">
-            <span className="shrink-0 text-slate-500 font-medium">Severity Classification</span>
+          <div className="flex items-center justify-between gap-3 border-b border-dashed border-navy-600/70 py-2 text-[12px]">
+            <span className="shrink-0 text-steel-400 font-medium">Severity Classification</span>
             <span className="text-right font-bold flex items-center gap-1.5" style={{ color: severityColor }}>
               <span className="size-2 rounded-full" style={{ backgroundColor: severityColor }}></span>
               {severity} Priority
             </span>
           </div>
 
-          <div className="flex items-center justify-between gap-3 border-b border-dashed border-slate-200 py-2 text-[12px]">
-            <span className="shrink-0 text-slate-500 font-medium">Occurred</span>
-            <span className="text-right font-medium text-slate-900">
+          <div className="flex items-center justify-between gap-3 border-b border-dashed border-navy-600/70 py-2 text-[12px]">
+            <span className="shrink-0 text-steel-400 font-medium">Occurred</span>
+            <span className="text-right font-medium text-steel-100">
               {formatDateTime(incident.occurredAt)}
             </span>
           </div>
 
-          <div className="flex items-center justify-between gap-3 border-b border-dashed border-slate-200 py-2 text-[12px]">
-            <span className="shrink-0 text-slate-500 font-medium">Coordinates</span>
-            <span className="text-right font-bold font-mono text-slate-900">
+          <div className="flex items-center justify-between gap-3 border-b border-dashed border-navy-600/70 py-2 text-[12px]">
+            <span className="shrink-0 text-steel-400 font-medium">Coordinates</span>
+            <span className="text-right font-bold font-mono text-steel-100">
               {incident.lat.toFixed(4)}, {incident.lng.toFixed(4)}
             </span>
           </div>
 
           {incident.description ? (
-            <div className="flex items-start justify-between gap-3 border-b border-dashed border-slate-200 py-2 text-[12px]">
-              <span className="shrink-0 text-slate-500 font-medium">Details</span>
-              <span className="text-right font-medium text-slate-800">
+            <div className="flex items-start justify-between gap-3 border-b border-dashed border-navy-600/70 py-2 text-[12px]">
+              <span className="shrink-0 text-steel-400 font-medium">Details</span>
+              <span className="text-right font-medium text-steel-100">
                 {incident.description}
               </span>
             </div>
           ) : null}
 
-          <p className="py-2 text-center text-[10px] font-bold uppercase tracking-[0.08em] text-amber-700">
+          <p className="py-2 text-center text-[10px] font-bold uppercase tracking-[0.08em] text-amber-300">
             {incident.isDemo
               ? 'DEMO DATA - NOT REAL CRIME INFORMATION'
               : 'USER-REPORTED - NOT VERIFIED'}
@@ -235,7 +235,7 @@ export function IncidentSheet({
           <button
             type="button"
             onClick={() => onEdit(incident)}
-            className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-amber-500/60 bg-amber-500/15 px-3 py-2.5 text-[12px] font-semibold text-amber-800 hover:bg-amber-500/25 transition-colors cursor-pointer"
+            className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-amber-500/60 bg-amber-500/15 px-3 py-2.5 text-[12px] font-semibold text-amber-300 hover:bg-amber-500/25 transition-colors cursor-pointer"
           >
             <Pencil className="size-4" aria-hidden /> Edit crime &amp; location
           </button>
@@ -254,14 +254,14 @@ export function IncidentSheet({
               <button
                 type="button"
                 onClick={() => onDelete(incident.id)}
-                className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-red-500 bg-red-600 px-3 py-2.5 text-[12px] font-semibold text-white transition-colors hover:bg-red-700 cursor-pointer"
+                className="flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-risk-critical/60 bg-risk-critical/20 px-3 py-2.5 text-[12px] font-semibold text-risk-critical transition-colors hover:bg-risk-critical/30 cursor-pointer"
               >
                 <Check className="size-4" aria-hidden /> Confirm delete
               </button>
               <button
                 type="button"
                 onClick={() => setConfirming(false)}
-                className="rounded-xl border border-slate-300 bg-slate-100 px-3 py-2.5 text-[12px] font-semibold text-slate-700 transition-colors hover:bg-slate-200 cursor-pointer"
+                className="rounded-xl border border-navy-600 bg-navy-800 px-3 py-2.5 text-[12px] font-semibold text-steel-200 transition-colors hover:bg-navy-700 hover:text-white cursor-pointer"
               >
                 Keep
               </button>
@@ -270,7 +270,7 @@ export function IncidentSheet({
             <button
               type="button"
               onClick={() => setConfirming(true)}
-              className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-red-300 bg-transparent px-3 py-2.5 text-[12px] font-semibold text-red-600 transition-colors hover:bg-red-50 cursor-pointer"
+              className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-risk-critical/50 bg-transparent px-3 py-2.5 text-[12px] font-semibold text-risk-critical transition-colors hover:bg-risk-critical/15 cursor-pointer"
             >
               <Trash2 className="size-4" aria-hidden /> Delete crime
             </button>

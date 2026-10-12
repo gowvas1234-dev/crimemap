@@ -45,35 +45,35 @@ export function StatisticsPanel({ stats, zones, className = '' }: StatisticsPane
           label="Total incidents"
           value={formatNumber(stats.totalIncidents)}
           hint="Matching active filters"
-          color="#2c5282" // Natural Slate Navy
+          color="#38bdf8" // Vibrant Sky Blue
           icon={<Activity className="size-3.5" />}
         />
         <StatTile
           label="Active zones"
           value={stats.activeHotspots}
           hint="Flagged for patrol focus"
-          color="#991b1b" // Natural Brick Crimson
+          color="#ef4444" // Crisp Crimson Red
           icon={<Flame className="size-3.5" />}
         />
         <StatTile
           label="Emerging zones"
           value={stats.emergingHotspots}
           hint="New or rising localities"
-          color="#b45309" // Natural Warm Ochre
+          color="#f59e0b" // Bright Amber Gold
           icon={<Zap className="size-3.5" />}
         />
         <StatTile
           label="High-risk zones"
           value={stats.highRiskZones}
           hint="High or critical rating"
-          color="#c2410c" // Natural Burnt Terracotta
+          color="#fb923c" // Vivid Tangerine Orange
           icon={<ShieldAlert className="size-3.5" />}
         />
         <StatTile
           label="Avg risk score"
           value={`${stats.averageRiskScore}/100`}
           hint="Mean across visible zones"
-          color="#475569" // Natural Charcoal Slate
+          color="#f8fafc" // Pure Bright White/Silver
           icon={<Gauge className="size-3.5" />}
         />
       </div>
@@ -102,7 +102,7 @@ export function StatisticsPanel({ stats, zones, className = '' }: StatisticsPane
               />
             </span>
           </div>
-          <p className="mt-3 text-[11px] leading-relaxed text-slate-500 font-serif border-t border-gray-200 pt-2">
+          <p className="mt-3 text-[11px] leading-relaxed text-steel-400 font-sans border-t border-navy-700 pt-2 font-medium">
             Comparison uses synthetic demo incident timestamps inside the selected date range.
           </p>
         </Panel>
@@ -111,21 +111,21 @@ export function StatisticsPanel({ stats, zones, className = '' }: StatisticsPane
           {stats.mostCommonCategory ? (
             <>
               <div className="flex items-center justify-between gap-3">
-                <span className="text-xl font-bold text-slate-900 font-serif">{stats.mostCommonCategory}</span>
+                <span className="text-xl font-bold text-white font-sans">{stats.mostCommonCategory}</span>
                 <span
                   className="h-3.5 w-3.5 rounded-full"
                   style={{ backgroundColor: CRIME_CATEGORY_COLORS[stats.mostCommonCategory] }}
                   aria-hidden
                 />
               </div>
-              <div className="mt-1.5 text-[12px] text-slate-600 font-serif font-medium">
+              <div className="mt-1.5 text-[12px] text-steel-200 font-sans font-semibold">
                 {formatNumber(stats.mostCommonCount)} incidents &middot;{' '}
                 {stats.totalIncidents > 0
                   ? Math.round((stats.mostCommonCount / stats.totalIncidents) * 100)
                   : 0}
                 % of all filtered records
               </div>
-              <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100 border border-slate-200/60">
+              <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-navy-950 border border-navy-700">
                 <div
                   className="h-full rounded-full transition-all duration-300"
                   style={{
@@ -136,13 +136,13 @@ export function StatisticsPanel({ stats, zones, className = '' }: StatisticsPane
               </div>
             </>
           ) : (
-            <p className="text-[11px] text-slate-500 font-serif">No incidents match the current filters.</p>
+            <p className="text-[11px] text-steel-400 font-sans font-medium">No incidents match the current filters.</p>
           )}
         </Panel>
 
         <Panel title="Zone watchlist" subtitle="Highest risk score first">
           {watchlist.length > 0 ? (
-            <ul className="divide-y divide-gray-200 font-serif">
+            <ul className="divide-y divide-navy-700 font-sans">
               {watchlist.map((zone) => (
                 <li key={zone.id} className="flex items-center gap-3 py-2.5 first:pt-0 last:pb-0">
                   <span
@@ -152,12 +152,12 @@ export function StatisticsPanel({ stats, zones, className = '' }: StatisticsPane
                   />
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="truncate text-[13px] font-bold text-slate-900 font-serif">
+                      <span className="truncate text-[13px] font-bold text-white font-sans">
                         {zone.area}
                       </span>
                       <RiskBadge level={zone.riskLevel} />
                     </div>
-                    <div className="mt-0.5 flex items-center gap-2 text-[11px] text-slate-500 font-serif">
+                    <div className="mt-0.5 flex items-center gap-2 text-[11px] text-steel-400 font-sans font-medium">
                       <span>{zone.id}</span>
                       <span>&middot;</span>
                       <span>{zone.dominantCrime}</span>
@@ -180,12 +180,12 @@ export function StatisticsPanel({ stats, zones, className = '' }: StatisticsPane
               ))}
             </ul>
           ) : (
-            <p className="text-[11px] text-slate-500 font-serif">No zones match the current filters.</p>
+            <p className="text-[11px] text-steel-400 font-sans font-medium">No zones match the current filters.</p>
           )}
         </Panel>
       </div>
 
-      <p className="pb-1 text-[10px] leading-relaxed text-steel-600">
+      <p className="pb-1 text-[11px] leading-relaxed text-steel-400 font-medium">
         All figures derive from synthetic demo records bundled with the app. They are not
         statistics from any police department or government source.
       </p>

@@ -60,14 +60,14 @@ export function AreaDatePanel({
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close area and date filters"
-              className="rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+              className="rounded p-1 text-steel-300 hover:bg-navy-700 hover:text-white"
             >
               <X className="size-3.5" />
             </button>
           </div>
 
           <div className="scroll-thin max-h-[55vh] overflow-y-auto px-3 py-3 sm:max-h-[68vh]">
-            <div className="mb-1.5 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.14em] text-steel-500">
+            <div className="mb-1.5 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.14em] text-steel-300">
               <span>Area</span>
             </div>
             <select
@@ -84,15 +84,15 @@ export function AreaDatePanel({
               ))}
             </select>
 
-            <div className="mb-1.5 mt-4 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.14em] text-steel-500">
+            <div className="mb-1.5 mt-4 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.14em] text-steel-300">
               <span>Date range</span>
-              <span className="normal-case tracking-normal text-steel-600">
+              <span className="normal-case tracking-normal text-steel-200 font-semibold">
                 {dateRange.from} → {dateRange.to}
               </span>
             </div>
 
-            <div className="flex items-center gap-1.5 rounded-lg border border-[#c5b49e] bg-[#f8f4ed] px-2.5 py-1.5 font-mono">
-              <Calendar className="size-3.5 shrink-0 text-slate-500" aria-hidden />
+            <div className="flex items-center gap-1.5 rounded-lg border border-navy-600 bg-navy-800 px-2.5 py-1.5 font-mono">
+              <Calendar className="size-3.5 shrink-0 text-steel-200" aria-hidden />
               <input
                 type="date"
                 value={dateRange.from}
@@ -101,9 +101,9 @@ export function AreaDatePanel({
                   onDateRangeChange({ ...dateRange, from: event.target.value })
                 }
                 aria-label="Date range start"
-                className="min-w-0 flex-1 bg-transparent text-[11px] font-bold text-slate-900 outline-none"
+                className="min-w-0 flex-1 bg-transparent text-[11px] font-bold text-white outline-none"
               />
-              <span className="text-[11px] text-slate-400">→</span>
+              <span className="text-[11px] text-steel-300 font-bold">→</span>
               <input
                 type="date"
                 value={dateRange.to}
@@ -112,7 +112,7 @@ export function AreaDatePanel({
                   onDateRangeChange({ ...dateRange, to: event.target.value })
                 }
                 aria-label="Date range end"
-                className="min-w-0 flex-1 bg-transparent text-[11px] font-bold text-slate-900 outline-none"
+                className="min-w-0 flex-1 bg-transparent text-[11px] font-bold text-white outline-none"
               />
             </div>
 
@@ -127,8 +127,8 @@ export function AreaDatePanel({
                     aria-pressed={active}
                     className={`rounded-full border px-2.5 py-1 text-[11px] font-bold transition-colors font-cyber ${
                       active
-                        ? 'border-gray-700 bg-gray-100 text-gray-900'
-                        : 'border-gray-400 text-slate-700 hover:border-gray-600 hover:bg-slate-50'
+                        ? 'border-blue-500 bg-blue-600 text-white font-bold'
+                        : 'border-navy-600 bg-navy-800 text-steel-200 hover:border-navy-500 hover:text-white'
                     }`}
                   >
                     {preset.label}
@@ -144,12 +144,12 @@ export function AreaDatePanel({
           onClick={() => setOpen(true)}
           aria-label="Open area and date filters"
           title="Area & date filters"
-          className="relative grid size-10 place-items-center rounded-full border border-gray-400 bg-white text-slate-800 shadow-[0_8px_24px_rgba(0,0,0,0.22)] backdrop-blur-md transition-colors hover:text-slate-950 hover:border-gray-600"
+          className="relative grid size-10 place-items-center rounded-full border border-navy-600 bg-navy-900/95 text-steel-300 shadow-[0_8px_24px_rgba(0,0,0,0.45)] backdrop-blur-md transition-colors hover:text-white hover:border-navy-500 cursor-pointer"
         >
           <MapPin className="size-5" aria-hidden />
           {isAreaFiltered ? (
             <span
-              className="absolute right-1.5 top-1.5 size-2 rounded-full bg-blue-600 ring-2 ring-white"
+              className="absolute right-1.5 top-1.5 size-2 rounded-full bg-blue-500 ring-2 ring-navy-900"
               aria-hidden
             />
           ) : null}

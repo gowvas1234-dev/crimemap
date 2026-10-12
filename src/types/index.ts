@@ -290,3 +290,43 @@ export type AppView =
   | 'reports'
 
 export type ThemeMode = 'dark' | 'light'
+
+export interface AuthUser {
+  id: string
+  name: string
+  badgeNumber: string
+  role: string
+  station: string
+  department: string
+  loginTime: string
+}
+
+export interface CPORecipientStatus {
+  cpoId: string
+  cpoName: string
+  rank: string
+  badgeNumber: string
+  stationName: string
+  beatArea: string
+  callsign: string
+  device: string
+  status: 'Delivered' | 'Acknowledged' | 'Responding'
+  deliveredAt: string
+}
+
+export interface CPONotification {
+  id: string
+  incidentId: string
+  category: CrimeCategory
+  severity: Severity
+  area: string
+  occurredAt: string
+  dispatchedAt: string
+  description: string
+  riskScore: number
+  totalCposNotified: number
+  totalStationsAlerted: number
+  recipients: CPORecipientStatus[]
+  read: boolean
+}
+

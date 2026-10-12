@@ -75,15 +75,15 @@ export function FilterPanel({
   )?.label
 
   const chipClass = (active: boolean) =>
-    `rounded-full border px-2.5 py-1 text-[10px] font-semibold transition-colors ${
-      active ? '' : 'border-navy-600 text-steel-500 hover:border-navy-500'
+    `rounded-full border px-2.5 py-1 text-[10px] font-bold transition-colors ${
+      active ? '' : 'border-navy-600 bg-navy-800 text-steel-200 hover:border-navy-500 hover:text-white'
     }`
 
   return (
-    <div className={`pointer-events-auto absolute left-2 top-2 sm:left-3 sm:top-3 font-serif ${open ? 'z-[1300]' : 'z-[1100]'}`}>
+    <div className={`pointer-events-auto absolute left-2 top-2 sm:left-3 sm:top-3 font-sans ${open ? 'z-[1300]' : 'z-[1100]'}`}>
       {open ? (
         <div
-          className="w-[calc(100vw-16px)] max-w-[290px] rounded-xl border backdrop-blur-md font-serif transition-all"
+          className="w-[calc(100vw-16px)] max-w-[290px] rounded-xl border backdrop-blur-md font-sans transition-all"
           style={{
             backgroundColor: 'var(--card-bg)',
             borderColor: 'var(--card-border)',
@@ -108,7 +108,7 @@ export function FilterPanel({
                   type="button"
                   onClick={onReset}
                   title="Reset filters"
-                  className="rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                  className="rounded p-1 text-steel-300 hover:bg-navy-700 hover:text-white cursor-pointer"
                 >
                   <RotateCcw className="size-3.5" />
                 </button>
@@ -117,17 +117,17 @@ export function FilterPanel({
                 type="button"
                 onClick={() => setOpen(false)}
                 aria-label="Close filters"
-                className="rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                className="rounded p-1 text-steel-300 hover:bg-navy-700 hover:text-white cursor-pointer"
               >
                 <X className="size-3.5" />
               </button>
             </div>
           </div>
 
-          <div className="scroll-thin max-h-[55vh] overflow-y-auto px-3 py-3 sm:max-h-[68vh] font-serif">
-          <div className="mb-1.5 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.12em] text-slate-500 font-serif">
+          <div className="scroll-thin max-h-[55vh] overflow-y-auto px-3 py-3 sm:max-h-[68vh] font-sans">
+          <div className="mb-1.5 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.12em] text-steel-300 font-sans">
             <span>Time period</span>
-            <span className="normal-case tracking-normal text-steel-600">
+            <span className="normal-case tracking-normal text-steel-200 font-semibold">
               {filters.dateRange.from} → {filters.dateRange.to}
             </span>
           </div>
@@ -143,7 +143,7 @@ export function FilterPanel({
                   className={chipClass(active)}
                   style={
                     active
-                      ? { borderColor: '#2c5282', backgroundColor: '#2c52821a', color: '#2c5282' }
+                      ? { borderColor: '#3b82f6', backgroundColor: '#3b82f633', color: '#ffffff' }
                       : undefined
                   }
                 >
@@ -153,12 +153,12 @@ export function FilterPanel({
             })}
           </div>
 
-          <div className="mb-1 mt-4 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.14em] text-steel-500">
+          <div className="mb-1 mt-4 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.14em] text-steel-300">
             <span>Crime type</span>
             <button
               type="button"
               onClick={() => onChange({ ...filters, categories: [...CRIME_CATEGORIES] })}
-              className="text-blue-400 hover:text-blue-300"
+              className="text-blue-400 hover:text-blue-300 font-bold"
             >
               All
             </button>
@@ -174,8 +174,8 @@ export function FilterPanel({
                     type="button"
                     onClick={() => toggleCategory(category)}
                     aria-pressed={active}
-                    className={`flex w-full items-center gap-2 rounded px-1.5 py-1.5 text-left text-[11px] transition-colors ${
-                      active ? 'bg-navy-800 text-steel-100' : 'text-steel-500 hover:bg-navy-800/60'
+                    className={`flex w-full items-center gap-2 rounded px-1.5 py-1.5 text-left text-[11px] font-medium transition-colors cursor-pointer ${
+                      active ? 'bg-navy-800 text-white font-bold' : 'text-steel-300 hover:bg-navy-800/60 hover:text-white'
                     }`}
                   >
                     <span
@@ -198,19 +198,19 @@ export function FilterPanel({
                       ) : null}
                     </span>
                     <span className="flex-1 truncate">{category}</span>
-                    <span className="font-mono text-[10px] text-steel-500">{count}</span>
+                    <span className="font-mono text-[10px] text-steel-400 font-bold">{count}</span>
                   </button>
                 </li>
               )
             })}
           </ul>
 
-          <div className="mb-1.5 mt-4 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.14em] text-steel-500">
+          <div className="mb-1.5 mt-4 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.14em] text-steel-300">
             <span>Severity</span>
             <button
               type="button"
               onClick={() => onChange({ ...filters, severities: [...SEVERITIES] })}
-              className="text-blue-400 hover:text-blue-300"
+              className="text-blue-400 hover:text-blue-300 font-bold"
             >
               All
             </button>
@@ -238,12 +238,12 @@ export function FilterPanel({
             })}
           </div>
 
-          <div className="mb-1.5 mt-4 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.14em] text-steel-500">
+          <div className="mb-1.5 mt-4 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.14em] text-steel-300">
             <span>Risk level (zones)</span>
             <button
               type="button"
               onClick={() => onChange({ ...filters, riskLevels: [...RISK_LEVELS] })}
-              className="text-blue-400 hover:text-blue-300"
+              className="text-blue-400 hover:text-blue-300 font-bold"
             >
               All
             </button>
@@ -271,12 +271,12 @@ export function FilterPanel({
             })}
           </div>
 
-          <div className="mb-1.5 mt-4 flex items-center justify-between text-[9px] font-bold uppercase tracking-[0.14em] text-steel-500">
+          <div className="mb-1.5 mt-4 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.14em] text-steel-300">
             <span>Incident status</span>
             <button
               type="button"
               onClick={() => onChange({ ...filters, statuses: [...INCIDENT_STATUSES] })}
-              className="text-blue-400 hover:text-blue-300"
+              className="text-blue-400 hover:text-blue-300 font-bold"
             >
               All
             </button>
@@ -291,11 +291,11 @@ export function FilterPanel({
                   type="button"
                   onClick={() => toggleStatus(status)}
                   aria-pressed={active}
-                  className="rounded-full border px-2.5 py-1 text-[10px] font-bold font-serif transition-colors"
+                  className="rounded-full border px-2.5 py-1 text-[10px] font-bold font-sans transition-colors cursor-pointer"
                   style={{
-                    borderColor: active ? color : '#cbd5e1',
-                    backgroundColor: active ? `${color}14` : 'transparent',
-                    color: active ? color : '#64748b',
+                    borderColor: active ? color : '#334155',
+                    backgroundColor: active ? `${color}26` : 'rgba(15, 29, 51, 0.6)',
+                    color: active ? color : '#cbd5e1',
                   }}
                 >
                   {status}
@@ -304,19 +304,19 @@ export function FilterPanel({
             })}
           </div>
 
-          <div className="mt-4 rounded-lg border border-gray-200 bg-slate-50 px-2.5 py-2 font-serif">
-            <p className="text-[11px] leading-relaxed text-slate-600">
+          <div className="mt-4 rounded-lg border border-navy-600 bg-navy-800/80 px-2.5 py-2 font-sans">
+            <p className="text-[11px] leading-relaxed text-steel-200">
               Showing{' '}
-              <span className="font-bold text-slate-900 font-mono">
+              <span className="font-bold text-white font-mono">
                 {visibleCount} / {totalCount}
               </span>{' '}
-              demo incidents matching the active filters.
+              demo incidents matching active filters.
             </p>
             {isDirty ? (
               <button
                 type="button"
                 onClick={onReset}
-                className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-bold text-slate-800 hover:text-black"
+                className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-bold text-sky-400 hover:text-sky-300 cursor-pointer"
               >
                 <X className="size-3" /> Clear filters
               </button>
@@ -330,12 +330,12 @@ export function FilterPanel({
           onClick={() => setOpen(true)}
           aria-label="Open crime filters"
           title="Crime filters"
-          className="relative grid size-10 place-items-center rounded-full border border-gray-400 bg-white text-slate-800 shadow-[0_8px_24px_rgba(0,0,0,0.22)] backdrop-blur-md transition-colors hover:text-slate-950 hover:border-gray-600"
+          className="relative grid size-10 place-items-center rounded-full border border-navy-600 bg-navy-900/95 text-steel-300 shadow-[0_8px_24px_rgba(0,0,0,0.45)] backdrop-blur-md transition-colors hover:text-white hover:border-navy-500 cursor-pointer"
         >
           <SlidersHorizontal className="size-5" aria-hidden />
           {isDirty ? (
             <span
-              className="absolute right-1.5 top-1.5 size-2 rounded-full bg-blue-600 ring-2 ring-white"
+              className="absolute right-1.5 top-1.5 size-2 rounded-full bg-blue-500 ring-2 ring-navy-900"
               aria-hidden
             />
           ) : null}

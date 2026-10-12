@@ -67,7 +67,7 @@ export function ZoneDetailPanel({
           type="button"
           onClick={onClose}
           aria-label="Close zone analysis"
-          className="shrink-0 rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+          className="shrink-0 rounded p-1 text-steel-300 hover:bg-navy-700 hover:text-white"
         >
           <X className="size-4" />
         </button>
@@ -78,30 +78,30 @@ export function ZoneDetailPanel({
 
         {recommendation ? <RecommendationCard recommendation={recommendation} /> : null}
 
-        <div className="grid grid-cols-2 gap-2 text-[11px] font-serif">
-          <div className="rounded-lg border border-slate-200 bg-slate-50/80 px-2.5 py-2 shadow-xs">
-            <p className="font-bold uppercase tracking-[0.12em] text-slate-500 text-[10px]">Peak time</p>
-            <p className="mt-0.5 text-[12px] font-bold text-slate-900">{zone.peakWindow}</p>
-            <p className="text-slate-500">{zone.peakShare}% of incidents</p>
+        <div className="grid grid-cols-2 gap-2 text-[11px] font-sans">
+          <div className="rounded-lg border border-navy-600 bg-navy-800/80 px-2.5 py-2 shadow-xs">
+            <p className="font-bold uppercase tracking-[0.12em] text-steel-400 text-[10px]">Peak time</p>
+            <p className="mt-0.5 text-[12px] font-bold text-white">{zone.peakWindow}</p>
+            <p className="text-steel-300 font-medium">{zone.peakShare}% of incidents</p>
           </div>
-          <div className="rounded-lg border border-slate-200 bg-slate-50/80 px-2.5 py-2 shadow-xs">
-            <p className="font-bold uppercase tracking-[0.12em] text-slate-500 text-[10px]">Repeat spots</p>
-            <p className="mt-0.5 text-[12px] font-bold text-slate-900">{zone.repeatShare}%</p>
-            <p className="text-slate-500">within 250 m</p>
+          <div className="rounded-lg border border-navy-600 bg-navy-800/80 px-2.5 py-2 shadow-xs">
+            <p className="font-bold uppercase tracking-[0.12em] text-steel-400 text-[10px]">Repeat spots</p>
+            <p className="mt-0.5 text-[12px] font-bold text-white">{zone.repeatShare}%</p>
+            <p className="text-steel-300 font-medium">within 250 m</p>
           </div>
-          <div className="rounded-lg border border-slate-200 bg-slate-50/80 px-2.5 py-2 shadow-xs">
-            <p className="font-bold uppercase tracking-[0.12em] text-slate-500 text-[10px]">Previous window</p>
-            <p className="mt-0.5 text-[12px] font-bold text-slate-900">
+          <div className="rounded-lg border border-navy-600 bg-navy-800/80 px-2.5 py-2 shadow-xs">
+            <p className="font-bold uppercase tracking-[0.12em] text-steel-400 text-[10px]">Previous window</p>
+            <p className="mt-0.5 text-[12px] font-bold text-white">
               {zone.previousCount} incidents
             </p>
-            <p className="text-slate-500">now {zone.crimeCount}</p>
+            <p className="text-steel-300 font-medium">now {zone.crimeCount}</p>
           </div>
-          <div className="rounded-lg border border-slate-200 bg-slate-50/80 px-2.5 py-2 shadow-xs">
-            <p className="font-bold uppercase tracking-[0.12em] text-slate-500 text-[10px]">Nearby activity</p>
-            <p className="mt-0.5 text-[12px] font-bold text-slate-900">
+          <div className="rounded-lg border border-navy-600 bg-navy-800/80 px-2.5 py-2 shadow-xs">
+            <p className="font-bold uppercase tracking-[0.12em] text-steel-400 text-[10px]">Nearby activity</p>
+            <p className="mt-0.5 text-[12px] font-bold text-white">
               {zone.nearbyCount} incidents
             </p>
-            <p className="text-slate-500">within 3 km</p>
+            <p className="text-steel-300 font-medium">within 3 km</p>
           </div>
         </div>
 

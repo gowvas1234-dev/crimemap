@@ -46,7 +46,7 @@ export function TrendIndicator({
       {showGlyph ? <span aria-hidden className="text-[10px]">{trendGlyph(trend)}</span> : null}
       <span>{trend}</span>
       {typeof percent === 'number' ? (
-        <span className="text-slate-500 font-mono text-[10px]">
+        <span className="text-steel-200 font-mono text-[10px] font-bold">
           ({percent > 0 ? '+' : ''}
           {percent}%)
         </span>
@@ -58,7 +58,7 @@ export function TrendIndicator({
 export function DemoChip({ compact = false }: { compact?: boolean }) {
   return (
     <span
-      className="inline-flex items-center gap-1 rounded border border-amber-600/40 bg-amber-500/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-amber-600 font-cyber shadow-2xs"
+      className="inline-flex items-center gap-1 rounded border border-amber-400/50 bg-amber-500/20 px-2 py-0.5 text-[9px] font-black uppercase tracking-[0.14em] text-amber-300 font-cyber shadow-2xs"
       title="Synthetic sample data - not real crime information"
     >
       DEMO{compact ? '' : ' DATA'}

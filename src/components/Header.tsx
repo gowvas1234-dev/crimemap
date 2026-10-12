@@ -14,7 +14,7 @@ interface HeaderProps {
 }
 
 const CONTROL_CLASS =
-  'h-9 rounded-lg border border-gray-400 bg-white text-[13px] text-slate-900 outline-none transition-colors hover:border-gray-500 focus:border-gray-600 focus:ring-1 focus:ring-gray-400 font-sans shadow-2xs'
+  'h-9 rounded-lg border border-navy-600 bg-navy-800 text-[13px] text-steel-200 outline-none transition-colors hover:border-navy-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500/40 font-sans'
 
 export function Header({
   area,
@@ -76,13 +76,13 @@ export function Header({
           <Bell className="size-4" aria-hidden />
         </div>
 
-        <div className="flex shrink-0 items-center gap-2 rounded-lg border border-gray-400 bg-white py-1 pl-1 pr-1 sm:pr-3 shadow-2xs">
+        <div className="flex shrink-0 items-center gap-2 rounded-lg border border-navy-600 bg-navy-800 py-1 pl-1 pr-1 sm:pr-3">
           <span className="grid size-7 place-items-center rounded-md bg-gradient-to-br from-[#1e3a8a] to-[#0b1a30] text-[11px] font-bold text-amber-300 font-sans">
             DA
           </span>
           <span className="hidden leading-tight sm:block font-sans">
-            <span className="block text-[12px] font-bold text-slate-900">Demo Analyst</span>
-            <span className="block text-[10px] text-slate-600 font-medium">Analysis Cell</span>
+            <span className="block text-[12px] font-bold text-steel-100">Demo Analyst</span>
+            <span className="block text-[10px] text-steel-200 font-medium">Analysis Cell</span>
           </span>
         </div>
       </div>
@@ -90,7 +90,7 @@ export function Header({
       <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
         <label className="relative w-full sm:w-56">
           <Search
-            className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-steel-400"
+            className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-steel-200"
             aria-hidden
           />
           <input
@@ -120,29 +120,29 @@ export function Header({
                 ))}
               </select>
               <ChevronDown
-                className="pointer-events-none absolute right-2 top-1/2 size-3.5 -translate-y-1/2 text-steel-400"
+                className="pointer-events-none absolute right-2 top-1/2 size-3.5 -translate-y-1/2 text-steel-200"
                 aria-hidden
               />
             </label>
 
-            <div className="flex w-full items-center gap-1.5 rounded-lg border border-gray-400 bg-white px-2.5 py-1.5 sm:w-auto shadow-2xs font-sans">
-              <Calendar className="size-3.5 shrink-0 text-slate-500" aria-hidden />
+            <div className="flex w-full items-center gap-1.5 rounded-lg border border-navy-600 bg-navy-800 px-2.5 py-1.5 sm:w-auto font-sans">
+              <Calendar className="size-3.5 shrink-0 text-steel-200" aria-hidden />
               <input
                 type="date"
                 value={dateRange.from}
                 max={dateRange.to}
                 onChange={(event) => onDateRangeChange({ ...dateRange, from: event.target.value })}
                 aria-label="Date range start"
-                className="min-w-0 flex-1 bg-transparent text-[12px] text-slate-900 outline-none sm:w-[7.6rem] sm:flex-none font-sans font-semibold"
+                className="min-w-0 flex-1 bg-transparent text-[12px] text-steel-100 outline-none sm:w-[7.6rem] sm:flex-none font-sans font-bold"
               />
-              <span className="text-[12px] text-slate-400">→</span>
+              <span className="text-[12px] text-steel-200 font-bold">→</span>
               <input
                 type="date"
                 value={dateRange.to}
                 min={dateRange.from}
                 onChange={(event) => onDateRangeChange({ ...dateRange, to: event.target.value })}
                 aria-label="Date range end"
-                className="min-w-0 flex-1 bg-transparent text-[12px] text-slate-900 outline-none sm:w-[7.6rem] sm:flex-none font-sans font-semibold"
+                className="min-w-0 flex-1 bg-transparent text-[12px] text-steel-100 outline-none sm:w-[7.6rem] sm:flex-none font-sans font-bold"
               />
             </div>
           </>

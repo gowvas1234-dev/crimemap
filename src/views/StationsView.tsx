@@ -13,32 +13,32 @@ export function StationsView({ stations, onFocusArea }: StationsViewProps) {
   return (
     <div className="scroll-thin p-3 pb-6 xl:p-4">
       <Panel title="Police stations" subtitle="Fictional demo locations for mapping only">
-        <div className="space-y-2 md:hidden font-serif">
+        <div className="space-y-2 md:hidden font-sans">
           {stations.map((station) => (
             <div
               key={station.id}
-              className="rounded-lg border border-slate-200 bg-slate-50/80 p-3 shadow-xs"
+              className="rounded-lg border border-navy-700 bg-navy-950/80 p-3 shadow-sm"
             >
               <div className="flex items-start justify-between gap-2">
-                <span className="text-[14px] font-bold text-slate-900">{station.name}</span>
-                <span className="shrink-0 font-mono text-[10px] text-slate-500 font-bold">{station.id}</span>
+                <span className="text-[14px] font-bold text-white">{station.name}</span>
+                <span className="shrink-0 font-mono text-[10px] text-sky-400 font-bold">{station.id}</span>
               </div>
-              <div className="mt-1 flex flex-wrap items-center gap-2 text-[12px] text-slate-600">
-                <span className="inline-flex items-center gap-1 text-slate-900 font-semibold">
-                  <MapPin className="size-3.5 text-blue-600" aria-hidden />
+              <div className="mt-1 flex flex-wrap items-center gap-2 text-[12px] text-steel-300">
+                <span className="inline-flex items-center gap-1 text-white font-semibold">
+                  <MapPin className="size-3.5 text-sky-400" aria-hidden />
                   {station.area}
                 </span>
-                <span className="font-mono text-[10px] text-slate-500">
+                <span className="font-mono text-[10px] text-steel-400">
                   {station.lat.toFixed(4)}, {station.lng.toFixed(4)}
                 </span>
               </div>
-              <p className="mt-1.5 text-[11px] leading-snug text-slate-600">
+              <p className="mt-1.5 text-[11px] leading-snug text-steel-300">
                 {station.jurisdiction.join(', ')}
               </p>
               <button
                 type="button"
                 onClick={() => onFocusArea(station.area)}
-                className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 hover:text-blue-800"
+                className="mt-2 inline-flex items-center gap-1 text-[11px] font-bold text-sky-400 hover:text-sky-300 cursor-pointer"
               >
                 <MapPin className="size-3.5" /> Show on map
               </button>
@@ -46,33 +46,33 @@ export function StationsView({ stations, onFocusArea }: StationsViewProps) {
           ))}
         </div>
 
-        <div className="hidden overflow-x-auto md:block font-serif">
+        <div className="hidden overflow-x-auto md:block font-sans">
           <table className="w-full min-w-[900px] text-[12px]">
             <thead>
-              <tr className="border-b border-slate-200 text-left text-[10px] uppercase tracking-[0.12em] text-slate-500">
-                <th className="px-4 py-2">Station ID</th>
-                <th className="px-4 py-2">Name</th>
-                <th className="px-4 py-2">Area</th>
-                <th className="px-4 py-2">Jurisdiction</th>
-                <th className="px-4 py-2">Coordinates</th>
-                <th className="px-4 py-2">Action</th>
+              <tr className="border-b border-navy-700 text-left text-[10px] uppercase tracking-[0.12em] text-steel-400 font-bold">
+                <th className="px-4 py-2.5">Station ID</th>
+                <th className="px-4 py-2.5">Name</th>
+                <th className="px-4 py-2.5">Area</th>
+                <th className="px-4 py-2.5">Jurisdiction</th>
+                <th className="px-4 py-2.5">Coordinates</th>
+                <th className="px-4 py-2.5">Action</th>
               </tr>
             </thead>
             <tbody>
               {stations.map((station) => (
-                <tr key={station.id} className="border-b border-slate-100 hover:bg-slate-50/70">
-                  <td className="px-4 py-2 font-mono text-[10px] text-slate-600 font-bold">{station.id}</td>
-                  <td className="px-4 py-2 font-bold text-slate-900">{station.name}</td>
-                  <td className="px-4 py-2 text-slate-800 font-semibold">{station.area}</td>
-                  <td className="max-w-[520px] px-4 py-2 text-slate-600">{station.jurisdiction.join(', ')}</td>
-                  <td className="px-4 py-2 font-mono text-[10px] text-slate-500">
+                <tr key={station.id} className="border-b border-navy-800/80 hover:bg-navy-800/50 transition-colors">
+                  <td className="px-4 py-2 font-mono text-[10px] text-sky-400 font-bold">{station.id}</td>
+                  <td className="px-4 py-2 font-bold text-white">{station.name}</td>
+                  <td className="px-4 py-2 text-steel-200 font-semibold">{station.area}</td>
+                  <td className="max-w-[520px] px-4 py-2 text-steel-300">{station.jurisdiction.join(', ')}</td>
+                  <td className="px-4 py-2 font-mono text-[10px] text-steel-400">
                     {station.lat.toFixed(4)}, {station.lng.toFixed(4)}
                   </td>
                   <td className="px-4 py-2">
                     <button
                       type="button"
                       onClick={() => onFocusArea(station.area)}
-                      className="inline-flex items-center gap-1 text-[11px] font-bold text-blue-600 hover:text-blue-800"
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-sky-400 hover:text-sky-300 cursor-pointer"
                     >
                       <MapPin className="size-3.5" /> Show on map
                     </button>
@@ -82,7 +82,7 @@ export function StationsView({ stations, onFocusArea }: StationsViewProps) {
             </tbody>
           </table>
         </div>
-        <div className="mt-3 text-[10px] text-slate-500 font-serif border-t border-slate-100 pt-2">
+        <div className="mt-3 text-[10px] text-steel-400 font-sans font-medium border-t border-navy-700 pt-2 flex items-center gap-2">
           <DemoChip compact /> No contact, capacity or operational status provided.
         </div>
       </Panel>

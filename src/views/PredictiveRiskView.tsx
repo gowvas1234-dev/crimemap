@@ -51,9 +51,9 @@ export function PredictiveRiskView({ forecast, onFocusArea }: PredictiveRiskView
 
       <Panel title="Forecast summary" subtitle="By risk zone (next operational outlook)">
         {predictions.length === 0 ? (
-          <p className="text-[12px] text-slate-500">No forecastable zones for current filters.</p>
+          <p className="text-[12px] text-steel-400 font-medium">No forecastable zones for current filters.</p>
         ) : (
-          <div className="divide-y divide-gray-200 font-serif">
+          <div className="divide-y divide-navy-700 font-sans">
             {predictions.map((prediction) => {
               const riskColor = RISK_LEVEL_COLORS[prediction.risk_level] ?? '#64748b'
               return (
@@ -66,12 +66,12 @@ export function PredictiveRiskView({ forecast, onFocusArea }: PredictiveRiskView
                     />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="truncate text-[15px] font-bold text-slate-900 font-serif">
+                        <span className="truncate text-[15px] font-bold text-white font-sans">
                           {prediction.area}
                         </span>
                         <RiskBadge level={prediction.risk_level} />
                       </div>
-                      <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-slate-600 font-serif font-medium">
+                      <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] text-steel-400 font-sans font-medium">
                         <span>Zone: {prediction.zoneId}</span>
                         <span>&middot;</span>
                         <span>Confidence: {formatPercent(prediction.confidence)}</span>
@@ -81,11 +81,11 @@ export function PredictiveRiskView({ forecast, onFocusArea }: PredictiveRiskView
                     </div>
                     <div className="shrink-0 text-right">
                       <span
-                        className="text-[20px] font-bold font-serif"
+                        className="text-[20px] font-bold font-sans"
                         style={{ color: riskColor }}
                       >
                         {prediction.risk_score}
-                        <span className="text-[12px] text-slate-400 font-normal"> / 100</span>
+                        <span className="text-[12px] text-steel-400 font-normal"> / 100</span>
                       </span>
                       <div className="mt-0.5 flex justify-end">
                         <TrendIndicator trend="Stable" showGlyph={false} />
@@ -93,8 +93,8 @@ export function PredictiveRiskView({ forecast, onFocusArea }: PredictiveRiskView
                     </div>
                   </div>
 
-                  {/* Natural progress bar showing risk intensity */}
-                  <div className="ml-4.5 h-1.5 w-[calc(100%-1.125rem)] overflow-hidden rounded-full bg-slate-100 border border-slate-200/60">
+                  {/* Progress bar showing risk intensity */}
+                  <div className="ml-4.5 h-1.5 w-[calc(100%-1.125rem)] overflow-hidden rounded-full bg-navy-950 border border-navy-700">
                     <div
                       className="h-full rounded-full transition-all duration-300"
                       style={{
@@ -105,9 +105,9 @@ export function PredictiveRiskView({ forecast, onFocusArea }: PredictiveRiskView
                   </div>
 
                   {prediction.contributing_factors.length > 0 ? (
-                    <ul className="ml-4.5 flex flex-wrap gap-1.5 text-[11px] text-slate-700 font-serif">
+                    <ul className="ml-4.5 flex flex-wrap gap-1.5 text-[11px] text-steel-200 font-sans">
                       {prediction.contributing_factors.map((factor) => (
-                        <li key={factor} className="rounded-md border border-gray-300 bg-slate-50 px-2 py-0.5 text-[10px] font-medium text-slate-700 shadow-2xs">
+                        <li key={factor} className="rounded-md border border-navy-600 bg-navy-950/80 px-2 py-0.5 text-[10px] font-medium text-steel-200 shadow-xs">
                           {factor}
                         </li>
                       ))}
@@ -121,17 +121,17 @@ export function PredictiveRiskView({ forecast, onFocusArea }: PredictiveRiskView
       </Panel>
 
       <Panel title="Methodology" subtitle="Deterministic & explainable police analytics">
-        <ul className="space-y-2 text-[12px] leading-relaxed text-slate-700 font-serif">
+        <ul className="space-y-2 text-[12px] leading-relaxed text-steel-300 font-sans font-medium">
           <li className="flex items-start gap-2">
-            <ShieldAlert className="mt-0.5 size-4 text-amber-700 shrink-0" />
+            <ShieldAlert className="mt-0.5 size-4 text-amber-400 shrink-0" />
             <span>Deterministic algorithmic classification derived from actual incident frequency, temporal density, and geographic proximity.</span>
           </li>
           <li className="flex items-start gap-2">
-            <TrendingUp className="mt-0.5 size-4 text-[#2c5282] shrink-0" />
+            <TrendingUp className="mt-0.5 size-4 text-sky-400 shrink-0" />
             <span>Trend persistence applied conservatively; zones marked emerging receive a calibrated status watch indicator.</span>
           </li>
           <li className="flex items-start gap-2">
-            <ShieldAlert className="mt-0.5 size-4 text-slate-600 shrink-0" />
+            <ShieldAlert className="mt-0.5 size-4 text-steel-400 shrink-0" />
             <span>Confidence metrics represent empirical spatial data coverage across the active filtering window.</span>
           </li>
         </ul>

@@ -67,24 +67,24 @@ export function PatrolView({ dispatchPlan, zones, recommendations }: PatrolViewP
               The unit pool is dealt round-robin across staffed recommendations, so every top-priority
               zone gets coverage before any zone gets a second unit.
             </p>
-            <ul className="mt-2 space-y-1.5 font-serif">
+            <ul className="mt-2 space-y-1.5 font-sans">
               {recommendations.map((recommendation, index) => {
                 const zone = zones.find((entry) => entry.id === recommendation.zoneId)
                 if (!zone) return null
                 return (
                   <li
                     key={recommendation.zoneId}
-                    className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50/80 px-3 py-2 shadow-xs"
+                    className="flex items-center justify-between gap-2 rounded-lg border border-navy-700 bg-navy-950/80 px-3 py-2 shadow-sm"
                   >
                     <div className="min-w-0">
-                      <span className="text-[10px] font-mono text-slate-500 font-bold">#{index + 1}</span>
-                      <p className="truncate text-[13px] font-bold text-slate-900">{zone.area}</p>
-                      <p className="text-[11px] text-slate-600">
+                      <span className="text-[10px] font-mono text-steel-400 font-bold">#{index + 1}</span>
+                      <p className="truncate text-[13px] font-bold text-white">{zone.area}</p>
+                      <p className="text-[11px] text-steel-300 font-medium">
                         Risk {zone.riskScore}/100 · {recommendation.units} unit
                         {recommendation.units === 1 ? '' : 's'} · {recommendation.window}
                       </p>
                     </div>
-                    <span className="text-[11px] font-bold text-blue-700">
+                    <span className="text-[11px] font-bold text-sky-400">
                       {recommendation.priority}
                     </span>
                   </li>
@@ -94,10 +94,10 @@ export function PatrolView({ dispatchPlan, zones, recommendations }: PatrolViewP
           </Panel>
 
           <Panel title="Simulation controls" subtitle="Demo only">
-            <div className="space-y-2.5 font-serif">
-              <label className="flex items-center justify-between gap-2 text-[12px] text-slate-700 font-medium">
+            <div className="space-y-2.5 font-sans">
+              <label className="flex items-center justify-between gap-2 text-[12px] text-steel-200 font-medium">
                 <span>Simulation speed (× realtime)</span>
-                <span className="font-mono text-[11px] font-bold text-slate-900">{speed.toFixed(1)}x</span>
+                <span className="font-mono text-[11px] font-bold text-sky-400">{speed.toFixed(1)}x</span>
               </label>
               <input
                 type="range"
@@ -106,9 +106,9 @@ export function PatrolView({ dispatchPlan, zones, recommendations }: PatrolViewP
                 step={0.25}
                 value={speed}
                 onChange={(event) => changeSpeed(Number(event.currentTarget.value))}
-                className="w-full accent-blue-600"
+                className="w-full accent-blue-500"
               />
-              <div className="flex flex-wrap gap-2 text-[10px] text-slate-500 font-medium">
+              <div className="flex flex-wrap gap-2 text-[10px] text-steel-400 font-semibold">
                 <span>0.25x</span>
                 <span>0.5x</span>
                 <span>1.0x</span>
@@ -116,7 +116,7 @@ export function PatrolView({ dispatchPlan, zones, recommendations }: PatrolViewP
                 <span>3.0x</span>
               </div>
             </div>
-            <p className="mt-2 text-[10px] leading-relaxed text-slate-500 font-serif border-t border-slate-100 pt-2">
+            <p className="mt-2 text-[10px] leading-relaxed text-steel-400 font-sans border-t border-navy-700 pt-2 font-medium">
               Units update at ~4 Hz to keep the animation smooth. Routes are synthetic and fixed to
               each assigned risk zone and its nearest station.
             </p>
@@ -124,32 +124,32 @@ export function PatrolView({ dispatchPlan, zones, recommendations }: PatrolViewP
 
           <Panel title="Live patrol units" subtitle={`${units.length} simulated units`}>
             {units.length === 0 ? (
-              <p className="text-[11px] text-slate-500 font-serif">
+              <p className="text-[11px] text-steel-400 font-sans font-medium">
                 No units active yet. Start the simulation to see animated patrols on the map.
               </p>
             ) : (
-              <ul className="space-y-1.5 font-serif">
+              <ul className="space-y-1.5 font-sans">
                 {units.map((unit) => (
                   <li
                     key={unit.id}
-                    className="flex items-start justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50/80 px-3 py-2 shadow-xs"
+                    className="flex items-start justify-between gap-2 rounded-lg border border-navy-700 bg-navy-950/80 px-3 py-2 shadow-sm"
                   >
                     <div className="min-w-0">
-                      <p className="text-[13px] font-bold text-slate-900">{unit.callsign}</p>
-                      <p className="mt-0.5 flex items-center gap-1 text-[11px] text-slate-600">
-                        <MapPin className="size-3 text-blue-600" />
+                      <p className="text-[13px] font-bold text-white">{unit.callsign}</p>
+                      <p className="mt-0.5 flex items-center gap-1 text-[11px] text-steel-300 font-medium">
+                        <MapPin className="size-3 text-sky-400" />
                         <span className="truncate">
                           {unit.zoneArea} · Base {unit.stationName}
                         </span>
                       </p>
-                      <p className="mt-0.5 text-[10px] text-slate-500">
-                        Status: <span className="font-semibold">{unit.displayStatus}</span> · ETA{' '}
+                      <p className="mt-0.5 text-[10px] text-steel-400 font-medium">
+                        Status: <span className="font-semibold text-steel-200">{unit.displayStatus}</span> · ETA{' '}
                         {unit.etaMinutes > 0 ? `${unit.etaMinutes} min` : 'On station'}
                       </p>
                     </div>
                     <div className="shrink-0 text-right">
                       <span className="font-mono text-[10px] text-steel-400">{unit.id}</span>
-                      <div className="mt-1 inline-flex items-center gap-1 rounded bg-blue-600/15 px-1.5 py-px text-[9px] font-bold uppercase tracking-[0.12em] text-blue-300">
+                      <div className="mt-1 inline-flex items-center gap-1 rounded bg-blue-600/25 px-1.5 py-px text-[9px] font-bold uppercase tracking-[0.12em] text-sky-300">
                         <ShieldCheck className="size-3" /> Demo
                       </div>
                     </div>

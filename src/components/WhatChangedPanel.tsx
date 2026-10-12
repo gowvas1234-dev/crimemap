@@ -28,16 +28,16 @@ export function WhatChangedPanel({ report, onFocusArea, onClose }: WhatChangedPa
   const declining = report.signals.filter((signal) => signal.kind === 'declining').length
 
   return (
-    <section className="rounded-xl border border-slate-200/90 bg-white shadow-[0_10px_30px_rgba(0,0,0,0.25)] text-slate-900 font-serif">
-      <header className="flex items-start justify-between gap-3 border-b border-slate-100 px-4 py-3">
+    <section className="rounded-xl border border-navy-700 bg-navy-850 text-white font-sans">
+      <header className="flex items-start justify-between gap-3 border-b border-navy-700 px-4 py-3">
         <div className="min-w-0">
-          <h2 className="inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.14em] text-blue-950 font-serif">
-            <span className="grid size-5 place-items-center rounded bg-amber-500/15 text-amber-700">
+          <h2 className="inline-flex items-center gap-2 text-[12px] font-bold uppercase tracking-[0.14em] text-white font-sans">
+            <span className="grid size-5 place-items-center rounded bg-amber-400/15 text-amber-300">
               <Radar className="size-3.5" aria-hidden />
             </span>
             Significant changes
           </h2>
-          <p className="mt-1 text-[11px] text-slate-500 font-serif">
+          <p className="mt-1 text-[11px] text-steel-400 font-sans">
             {report.window.recentLabel} compared with {report.window.previousLabel}
           </p>
         </div>
@@ -48,7 +48,7 @@ export function WhatChangedPanel({ report, onFocusArea, onClose }: WhatChangedPa
                 ? 'border-risk-critical/40 bg-risk-critical/10 text-risk-critical'
                 : report.overallDeltaPercent < 0
                   ? 'border-risk-low/40 bg-risk-low/10 text-risk-low'
-                  : 'border-slate-200 bg-slate-100 text-slate-700'
+                  : 'border-navy-600 bg-navy-800 text-steel-300'
             }`}
             title="City-wide change between the two windows"
           >
@@ -59,7 +59,7 @@ export function WhatChangedPanel({ report, onFocusArea, onClose }: WhatChangedPa
               type="button"
               onClick={onClose}
               aria-label="Close changes panel"
-              className="rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+              className="rounded p-1 text-steel-400 hover:bg-navy-700 hover:text-white"
             >
               <X className="size-4" />
             </button>
@@ -68,38 +68,38 @@ export function WhatChangedPanel({ report, onFocusArea, onClose }: WhatChangedPa
       </header>
 
       <div className="p-4">
-        <p className="text-[12px] leading-relaxed text-slate-600 font-serif">
+        <p className="text-[12px] leading-relaxed text-steel-400 font-sans">
           {formatNumber(report.recentTotal)} incidents in the recent window vs{' '}
           {formatNumber(report.previousTotal)} in the previous window · {rising} rising,{' '}
           {emerging} emerging, {declining} declining.
         </p>
 
         {report.signals.length === 0 ? (
-          <div className="mt-3 rounded-lg border border-slate-200 bg-slate-50 px-4 py-6 text-center font-serif">
-            <p className="text-[13px] font-bold text-slate-800">No significant changes</p>
-            <p className="mt-1 text-[11px] text-slate-500">
+          <div className="mt-3 rounded-lg border border-navy-600 bg-navy-800 px-4 py-6 text-center font-sans">
+            <p className="text-[13px] font-bold text-steel-200">No significant changes</p>
+            <p className="mt-1 text-[11px] text-steel-500">
               Every locality is within the significance thresholds for this window.
             </p>
           </div>
         ) : (
-          <ul className="mt-3 space-y-2 font-serif">
+          <ul className="mt-3 space-y-2 font-sans">
             {report.signals.map((signal) => {
               const style = SEVERITY_STYLES[signal.severity]
               return (
                 <li
                   key={signal.id}
-                  className={`flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border ${style.border} bg-slate-50/90 px-3 py-2.5 shadow-xs`}
+                  className={`flex flex-wrap items-center gap-x-3 gap-y-2 rounded-lg border ${style.border} bg-navy-800/70 px-3 py-2.5 shadow-xs`}
                 >
                   <span className={`size-2.5 shrink-0 rounded-full ${style.dot}`} aria-hidden />
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-[13px] font-bold text-slate-900">{signal.area}</span>
+                      <span className="text-[13px] font-bold text-white">{signal.area}</span>
                       <span
-                        className={`rounded border border-slate-200 px-1.5 py-px text-[9px] font-bold uppercase tracking-[0.12em] ${style.text}`}
+                        className={`rounded border border-navy-600 px-1.5 py-px text-[9px] font-bold uppercase tracking-[0.12em] ${style.text}`}
                       >
                         {KIND_LABEL[signal.kind]}
                       </span>
-                      <span className="font-mono text-[10px] text-slate-500 font-bold">
+                      <span className="font-mono text-[10px] text-steel-400 font-bold">
                         {signal.kind === 'declining'
                           ? formatPercent(signal.deltaPercent)
                           : signal.kind === 'emerging'
@@ -107,8 +107,8 @@ export function WhatChangedPanel({ report, onFocusArea, onClose }: WhatChangedPa
                             : formatPercent(signal.deltaPercent)}
                       </span>
                     </div>
-                    <p className="mt-0.5 truncate text-[12px] font-medium text-slate-800">{signal.headline}</p>
-                    <p className="mt-0.5 text-[10px] leading-snug text-slate-500">{signal.detail}</p>
+                    <p className="mt-0.5 truncate text-[12px] font-medium text-steel-200">{signal.headline}</p>
+                    <p className="mt-0.5 text-[10px] leading-snug text-steel-500">{signal.detail}</p>
                   </div>
                   <button
                     type="button"
