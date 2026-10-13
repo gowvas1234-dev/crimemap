@@ -177,6 +177,23 @@ export interface Recommendation {
 
 export type PatrolStatus = 'Standby' | 'Deploying' | 'Patrolling'
 
+/** Officer assigned to a patrolling unit. */
+export interface PatrolOfficer {
+  name: string
+  designation: string
+  badgeNumber: string
+  contactRadio: string
+  phone?: string
+}
+
+/** Vehicle details utilized by a patrol unit. */
+export interface PatrolVehicle {
+  name: string
+  type: string
+  registrationNumber: string
+  equipment: string[]
+}
+
 /** A simulated patrol vehicle with a route from its base to an assigned zone. */
 export interface PatrolUnit extends GeoPoint {
   id: string
@@ -190,6 +207,13 @@ export interface PatrolUnit extends GeoPoint {
   zoneId: string
   zoneArea: string
   route: GeoPoint[]
+  // Patrolling Cop details & designation
+  officer: PatrolOfficer
+  partnerOfficer?: PatrolOfficer
+  // Vehicle details
+  vehicle: PatrolVehicle
+  // Area of patrolling
+  patrolArea: string
 }
 
 export interface PatrolPlan {

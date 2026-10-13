@@ -1,4 +1,4 @@
-import { Activity, Clock, MapPin, Navigation, ShieldCheck } from 'lucide-react'
+import { Activity, Car, Clock, MapPin, Navigation, ShieldCheck, UserCheck } from 'lucide-react'
 import type { PatrolPlan, Recommendation, RiskZone, PoliceStation } from '../types'
 import { usePatrol } from '../patrol/usePatrol'
 import { DemoChip } from '../components/ui/Badge'
@@ -132,25 +132,50 @@ export function PatrolView({ dispatchPlan, zones, recommendations }: PatrolViewP
                 {units.map((unit) => (
                   <li
                     key={unit.id}
-                    className="flex items-start justify-between gap-2 rounded-lg border border-navy-700 bg-navy-950/80 px-3 py-2 shadow-sm"
+                    className="flex flex-col gap-1.5 rounded-lg border border-navy-700 bg-navy-950/80 p-2.5 shadow-sm font-sans"
                   >
-                    <div className="min-w-0">
-                      <p className="text-[13px] font-bold text-white">{unit.callsign}</p>
-                      <p className="mt-0.5 flex items-center gap-1 text-[11px] text-steel-300 font-medium">
-                        <MapPin className="size-3 text-sky-400" />
-                        <span className="truncate">
-                          {unit.zoneArea} · Base {unit.stationName}
-                        </span>
-                      </p>
-                      <p className="mt-0.5 text-[10px] text-steel-400 font-medium">
-                        Status: <span className="font-semibold text-steel-200">{unit.displayStatus}</span> · ETA{' '}
-                        {unit.etaMinutes > 0 ? `${unit.etaMinutes} min` : 'On station'}
-                      </p>
-                    </div>
-                    <div className="shrink-0 text-right">
-                      <span className="font-mono text-[10px] text-steel-400">{unit.id}</span>
-                      <div className="mt-1 inline-flex items-center gap-1 rounded bg-blue-600/25 px-1.5 py-px text-[9px] font-bold uppercase tracking-[0.12em] text-sky-300">
-                        <ShieldCheck className="size-3" /> Demo
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="text-[13px] font-black text-white">{unit.callsign}</p>
+                          <span className="font-mono text-[10px] text-steel-400 font-bold">{unit.id}</span>
+                        </div>
+                        {/* Patrolling Cop & Designation */}
+                        <div className="mt-1 flex items-center gap-1.5 text-[11px]">
+                          <UserCheck className="size-3.5 text-sky-400 shrink-0" />
+                          <span className="font-bold text-white truncate">{unit.officer.name}</span>
+                          <span className="text-amber-400 text-[10px] font-semibold truncate">&middot; {unit.officer.designation}</span>
+                          <span className="rounded bg-black/50 px-1 font-mono text-[9px] text-slate-300">
+                            {unit.officer.badgeNumber}
+                          </span>
+                        </div>
+                        {/* Vehicle In Use */}
+                        <div className="mt-1 flex items-center gap-1.5 text-[11px]">
+                          <Car className="size-3.5 text-amber-400 shrink-0" />
+                          <span className="font-bold text-slate-200 truncate">{unit.vehicle.name}</span>
+                          <span className="rounded bg-amber-500/20 border border-amber-400/40 px-1 font-mono text-[9px] font-bold text-amber-300">
+                            {unit.vehicle.registrationNumber}
+                          </span>
+                        </div>
+                        {/* Area of Patrolling */}
+                        <div className="mt-1 flex items-start gap-1 text-[11px] text-steel-300 font-medium">
+                          <MapPin className="size-3 text-red-400 shrink-0 mt-0.5" />
+                          <span className="truncate">
+                            <strong className="text-white">Area:</strong> {unit.patrolArea}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="shrink-0 text-right">
+                        <div className="inline-flex items-center gap-1 rounded bg-blue-600/25 px-1.5 py-px text-[9px] font-bold uppercase tracking-[0.12em] text-sky-300">
+                          <ShieldCheck className="size-3" /> Demo
+                        </div>
+                        <p className="mt-1 text-[10px] text-steel-400 font-medium">
+                          Status: <span className="font-semibold text-emerald-400">{unit.displayStatus}</span>
+                        </p>
+                        <p className="text-[10px] text-steel-400 font-mono">
+                          {unit.etaMinutes > 0 ? `ETA ${unit.etaMinutes}m` : 'On station'}
+                        </p>
                       </div>
                     </div>
                   </li>

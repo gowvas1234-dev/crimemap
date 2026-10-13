@@ -97,18 +97,30 @@ export function PatrolLayer({ isInside }: PatrolLayerProps = {}) {
               <span style={{ color: STATUS_COLORS[unit.displayStatus] }}>{unit.displayStatus}</span>
             </div>
             <div className="popup-row">
-              <span>Base</span>
-              <span>{unit.stationName}</span>
+              <span>Patrolling Cop</span>
+              <span className="font-bold text-white">{unit.officer.name}</span>
             </div>
             <div className="popup-row">
-              <span>Assigned zone</span>
-              <span>{unit.zoneArea}</span>
+              <span>Designation</span>
+              <span className="text-amber-400 font-semibold">{unit.officer.designation}</span>
+            </div>
+            <div className="popup-row">
+              <span>Vehicle</span>
+              <span className="text-sky-300 font-bold">{unit.vehicle.name} ({unit.vehicle.registrationNumber})</span>
+            </div>
+            <div className="popup-row">
+              <span>Patrol Area</span>
+              <span className="font-semibold text-white">{unit.patrolArea}</span>
+            </div>
+            <div className="popup-row">
+              <span>Base Station</span>
+              <span>{unit.stationName}</span>
             </div>
             <div className="popup-row">
               <span>ETA</span>
               <span>{unit.etaMinutes > 0 ? `${unit.etaMinutes} min` : 'On station'}</span>
             </div>
-            <div className="popup-demo">SIMULATED PATROL UNIT - CAMERA ONLINE</div>
+            <div className="popup-demo">PUDUCHERRY POLICE &middot; PATROL UNIT DASHCAM ONLINE</div>
           </Popup>
         </Marker>
       ))}

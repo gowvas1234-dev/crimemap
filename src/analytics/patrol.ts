@@ -1,5 +1,6 @@
 import type { GeoPoint, PatrolPlan, PatrolUnit, PoliceStation, Recommendation, RiskZone } from '../types'
 import { haversineMeters, lerpPoint } from '../utils/geo'
+import { PATROL_FLEET_ROSTER } from '../data/patrolRoster'
 
 /**
  * Patrol unit simulation.
@@ -104,6 +105,11 @@ function makeUnit(
     ? routeFor(zone, station, index)
     : [{ lat: station.lat, lng: station.lng }]
 
+  const rosterConfig = PATROL_FLEET_ROSTER[index % PATROL_FLEET_ROSTER.length]
+  const patrolArea = zone
+    ? `${zone.area} Sector & Adjoining Beat (Base: ${station.name})`
+    : `${rosterConfig.baseSector} (Base: ${station.name})`
+
   return {
     id: `PU-${String(index + 1).padStart(2, '0')}`,
     callsign: `${CALLSIGNS[index % CALLSIGNS.length]}-${Math.floor(index / CALLSIGNS.length) + 1}`,
@@ -117,6 +123,10 @@ function makeUnit(
     route,
     lat: station.lat,
     lng: station.lng,
+    officer: rosterConfig.officer,
+    partnerOfficer: rosterConfig.partnerOfficer,
+    vehicle: rosterConfig.vehicle,
+    patrolArea,
   }
 }
 

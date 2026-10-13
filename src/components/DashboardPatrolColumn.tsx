@@ -1,13 +1,17 @@
 import {
   ArrowRight,
   Car,
+  ChevronDown,
+  ChevronUp,
   Compass,
   MapPin,
   Navigation,
   Pause,
   Play,
+  Radio,
   RotateCcw,
   ShieldCheck,
+  UserCheck,
 } from 'lucide-react'
 import { useState } from 'react'
 import { usePatrol } from '../patrol/usePatrol'
@@ -24,8 +28,8 @@ type PatrolFilter = 'all' | 'moving' | 'deploying' | 'patrolling'
 
 /**
  * Dedicated Dashboard Column for Patrol Units (Moving & Active).
- * Provides live telemetry, real-time simulated motion, unit routes,
- * and direct connection with the Emergency SOS App.
+ * Displays patrolling cop details, designations, vehicles in use,
+ * designated patrol areas, real-time telemetry, and emergency SOS app link.
  */
 export function DashboardPatrolColumn({
   onNavigate = () => {},
@@ -36,6 +40,7 @@ export function DashboardPatrolColumn({
     usePatrol()
 
   const [filter, setFilter] = useState<PatrolFilter>('all')
+  const [expandedUnitId, setExpandedUnitId] = useState<string | null>(null)
 
   // Calculate moving units vs active units
   const movingUnits = units.filter(
@@ -46,11 +51,16 @@ export function DashboardPatrolColumn({
   const patrollingUnits = units.filter((unit) => unit.displayStatus === 'Patrolling')
 
   const filteredUnits = units.filter((unit) => {
-    if (filter === 'moving') return running && (unit.displayStatus === 'Patrolling' || unit.displayStatus === 'Deploying')
+    if (filter === 'moving')
+      return running && (unit.displayStatus === 'Patrolling' || unit.displayStatus === 'Deploying')
     if (filter === 'deploying') return unit.displayStatus === 'Deploying'
     if (filter === 'patrolling') return unit.displayStatus === 'Patrolling'
     return true
   })
+
+  const toggleExpand = (id: string) => {
+    setExpandedUnitId((current) => (current === id ? null : id))
+  }
 
   return (
     <div
@@ -84,7 +94,7 @@ export function DashboardPatrolColumn({
               </span>
             </div>
             <p className="text-[11px] font-medium text-slate-400 truncate">
-              Real-time tactical patrol surveillance &amp; dispatch monitoring
+              Officer designations, active vehicles &amp; area telemetry
             </p>
           </div>
         </div>
@@ -237,8 +247,8 @@ export function DashboardPatrolColumn({
         </button>
       </div>
 
-      {/* 5. Units Telemetry List */}
-      <div className="flex flex-col gap-2 max-h-[380px] overflow-y-auto scroll-thin pr-0.5">
+      {/* 5. Units Telemetry List with Cop Details, Designation, Vehicles & Patrol Areas */}
+      <div className="flex flex-col gap-2.5 max-h-[460px] overflow-y-auto scroll-thin pr-0.5">
         {filteredUnits.length === 0 ? (
           <div className="rounded-lg border border-slate-800 bg-[#0c1a2f] p-4 text-center text-xs text-slate-400">
             {filter === 'moving' && !running
@@ -250,13 +260,14 @@ export function DashboardPatrolColumn({
             const isUnitMoving =
               running &&
               (unit.displayStatus === 'Patrolling' || unit.displayStatus === 'Deploying')
+            const isExpanded = expandedUnitId === unit.id
 
             return (
               <div
                 key={unit.id}
                 className={`relative flex flex-col gap-2 rounded-xl border p-3 transition-all ${
                   isUnitMoving
-                    ? 'border-emerald-500/40 bg-[#0d2238] shadow-[0_0_12px_rgba(16,185,129,0.15)]'
+                    ? 'border-emerald-500/50 bg-[#0d2238] shadow-[0_0_15px_rgba(16,185,129,0.2)]'
                     : 'border-[#1b2c45] bg-[#091526] hover:border-slate-600'
                 }`}
               >
@@ -279,13 +290,6 @@ export function DashboardPatrolColumn({
                         </span>
                       )}
                     </div>
-                    <div className="mt-0.5 flex items-center gap-1 text-[11px] text-slate-300 font-medium">
-                      <MapPin className="size-3 text-sky-400 shrink-0" />
-                      <span className="truncate">
-                        Target: <strong className="text-white">{unit.zoneArea}</strong> &middot; Base{' '}
-                        {unit.stationName}
-                      </span>
-                    </div>
                   </div>
 
                   <div className="text-right shrink-0">
@@ -303,6 +307,100 @@ export function DashboardPatrolColumn({
                     <div className="text-[10px] text-slate-400 font-mono">
                       {unit.etaMinutes > 0 ? `ETA ${unit.etaMinutes}m` : 'On Station'}
                     </div>
+                  </div>
+                </div>
+
+                {/* Patrolling Cop Details & Designation */}
+                <div className="rounded-lg border border-[#1e2f47] bg-[#07111e]/90 p-2.5 space-y-1.5">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-blue-600/30 text-sky-300 border border-blue-400/50">
+                        <UserCheck className="size-3.5" />
+                      </div>
+                      <div className="min-w-0">
+                        <span className="text-[12px] font-black text-white truncate block">
+                          {unit.officer.name}
+                        </span>
+                        <span className="text-[10px] font-semibold text-amber-300 truncate block">
+                          {unit.officer.designation}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="shrink-0 text-right">
+                      <span className="rounded bg-black/60 border border-slate-700 px-1.5 py-0.5 font-mono text-[9px] font-bold text-slate-300">
+                        {unit.officer.badgeNumber}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Partner Officer & Radio Frequency */}
+                  <div className="flex flex-wrap items-center justify-between gap-1 border-t border-[#16253b] pt-1.5 text-[10px] text-slate-400">
+                    {unit.partnerOfficer && (
+                      <span className="truncate">
+                        Driver/Partner: <strong className="text-slate-200">{unit.partnerOfficer.name}</strong> ({unit.partnerOfficer.designation.split('/')[0].trim()})
+                      </span>
+                    )}
+                    <span className="inline-flex items-center gap-1 font-mono text-sky-400 shrink-0">
+                      <Radio className="size-2.5 text-sky-400" />
+                      {unit.officer.contactRadio.split(' ')[0]}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Vehicle In Use */}
+                <div className="rounded-lg border border-slate-800 bg-[#091526] p-2 space-y-1 text-[11px]">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <Car className="size-3.5 text-amber-400 shrink-0" />
+                      <span className="font-bold text-slate-100 truncate">
+                        {unit.vehicle.name}
+                      </span>
+                    </div>
+                    <span className="rounded bg-amber-500/20 border border-amber-400/40 px-1.5 py-0.5 font-mono text-[10px] font-black text-amber-300 shrink-0">
+                      {unit.vehicle.registrationNumber}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-[10px] text-slate-400">
+                    <span className="text-sky-300 font-medium">{unit.vehicle.type}</span>
+                    <button
+                      type="button"
+                      onClick={() => toggleExpand(unit.id)}
+                      className="inline-flex items-center gap-0.5 text-[10px] text-slate-400 hover:text-white transition-colors cursor-pointer"
+                    >
+                      <span>{isExpanded ? 'Less' : 'Equipment'}</span>
+                      {isExpanded ? <ChevronUp className="size-3" /> : <ChevronDown className="size-3" />}
+                    </button>
+                  </div>
+
+                  {/* Expandable Equipment List */}
+                  {isExpanded && (
+                    <div className="pt-1.5 border-t border-slate-800 flex flex-wrap gap-1 animate-in fade-in duration-150">
+                      {unit.vehicle.equipment.map((eq) => (
+                        <span
+                          key={eq}
+                          className="rounded bg-[#12233f] border border-blue-500/30 px-1.5 py-0.5 text-[9px] font-semibold text-slate-300"
+                        >
+                          {eq}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Area of Patrolling */}
+                <div className="flex items-start gap-1.5 text-[11px] text-slate-300 bg-[#07111e]/60 rounded-lg p-2 border border-[#17253b]">
+                  <MapPin className="size-3.5 text-red-400 shrink-0 mt-0.5" />
+                  <div className="min-w-0">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                      Area of Patrolling:
+                    </span>
+                    <span className="font-bold text-white leading-tight block">
+                      {unit.patrolArea}
+                    </span>
+                    <span className="text-[10px] text-slate-400 mt-0.5 block">
+                      Assigned Base: <strong className="text-slate-200">{unit.stationName}</strong>
+                    </span>
                   </div>
                 </div>
 
