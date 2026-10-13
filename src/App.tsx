@@ -10,6 +10,8 @@ import { CpoNotificationModal } from './components/CpoNotificationModal'
 import { CriticalAlertButton } from './components/CriticalAlertButton'
 import { CriticalSituationModal } from './components/CriticalSituationModal'
 import { DemoBanner } from './components/DemoBanner'
+import { EmergencySosButton } from './components/EmergencySosButton'
+import { EmergencySosModal } from './components/EmergencySosModal'
 import { Header } from './components/Header'
 import { OfficialGovBanner } from './components/OfficialGovBanner'
 import { ReportCrimeModal } from './components/ReportCrimeModal'
@@ -105,6 +107,7 @@ export default function App() {
   const [selectedCpoNotification, setSelectedCpoNotification] = useState<CPONotification | null>(null)
   const [reportCrimeModalOpen, setReportCrimeModalOpen] = useState(false)
   const [criticalModalOpen, setCriticalModalOpen] = useState(false)
+  const [emergencySosModalOpen, setEmergencySosModalOpen] = useState(false)
 
   const handleLogin = useCallback((loggedInUser: AuthUser) => {
     setUser(loggedInUser)
@@ -353,6 +356,7 @@ export default function App() {
             zones={visibleZones}
             onNavigate={navigate}
             onOpenReportCrime={() => setReportCrimeModalOpen(true)}
+            onOpenEmergencySos={() => setEmergencySosModalOpen(true)}
           />
         )
       case 'hotspots':
@@ -486,7 +490,10 @@ export default function App() {
             <div className="h-[2px] w-full shrink-0 bg-gray-500 shadow-xs" />
 
             <div className="shrink-0">
-              <OfficialGovBanner onOpenCriticalAlert={() => setCriticalModalOpen(true)} />
+              <OfficialGovBanner
+                onOpenCriticalAlert={() => setCriticalModalOpen(true)}
+                onOpenEmergencySos={() => setEmergencySosModalOpen(true)}
+              />
               <DemoBanner />
             </div>
 
@@ -505,6 +512,7 @@ export default function App() {
                 onOpenReportCrime={() => setReportCrimeModalOpen(true)}
                 onOpenCpoDispatch={() => setCpoModalOpen(true)}
                 onOpenCriticalAlert={() => setCriticalModalOpen(true)}
+                onOpenEmergencySos={() => setEmergencySosModalOpen(true)}
                 unreadCpoAlertsCount={cpoNotifications.filter((n) => !n.read).length}
               />
 
@@ -527,7 +535,8 @@ export default function App() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5">
+                    <EmergencySosButton onClick={() => setEmergencySosModalOpen(true)} compact />
                     <CriticalAlertButton onClick={() => setCriticalModalOpen(true)} compact />
                     <button
                       type="button"
@@ -610,6 +619,13 @@ export default function App() {
           onClose={() => setCriticalModalOpen(false)}
           onDispatch={createIncident}
           existingIncidentsCount={incidents.length}
+        />
+
+        {/* Emergency SOS App Connection Modal */}
+        <EmergencySosModal
+          isOpen={emergencySosModalOpen}
+          onClose={() => setEmergencySosModalOpen(false)}
+          onDispatchSos={createIncident}
         />
       </div>
     </PatrolProvider>

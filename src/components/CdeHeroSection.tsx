@@ -1,17 +1,24 @@
 import { BarChart3, Database, FileSpreadsheet, Map, PlusCircle } from 'lucide-react'
 import type { AppView, DashboardStats } from '../types'
+import { EmergencySosButton } from './EmergencySosButton'
 
 interface CdeHeroSectionProps {
   stats: DashboardStats
   onNavigate: (view: AppView) => void
   onOpenReportCrime?: () => void
+  onOpenEmergencySos?: () => void
 }
 
 /**
  * Hero & Trends Section modeled precisely on the FBI Crime Data Explorer
  * provided in bk image.png.
  */
-export function CdeHeroSection({ stats, onNavigate, onOpenReportCrime }: CdeHeroSectionProps) {
+export function CdeHeroSection({
+  stats,
+  onNavigate,
+  onOpenReportCrime,
+  onOpenEmergencySos,
+}: CdeHeroSectionProps) {
   return (
     <div className="flex flex-col w-full font-sans">
       {/* 1. Hero Banner Section featuring pp logo 2 as background */}
@@ -57,6 +64,9 @@ export function CdeHeroSection({ stats, onNavigate, onOpenReportCrime }: CdeHero
                   <PlusCircle className="size-4 text-white" />
                   <span>Report Crime &amp; Alert CPOs</span>
                 </button>
+              )}
+              {onOpenEmergencySos && (
+                <EmergencySosButton onClick={onOpenEmergencySos} />
               )}
             </div>
           </div>

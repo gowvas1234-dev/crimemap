@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 import type { AppView, AuthUser, ThemeMode } from '../types'
 import { NAV_ITEMS } from '../data/navigation'
+import { EmergencySosButton } from './EmergencySosButton'
 
 interface SidebarNavProps {
   activeView: AppView
@@ -24,6 +25,7 @@ interface SidebarNavProps {
   onOpenReportCrime?: () => void
   onOpenCpoDispatch?: () => void
   onOpenCriticalAlert?: () => void
+  onOpenEmergencySos?: () => void
   unreadCpoAlertsCount?: number
 }
 
@@ -44,6 +46,7 @@ export function SidebarNav({
   onOpenReportCrime,
   onOpenCpoDispatch,
   onOpenCriticalAlert,
+  onOpenEmergencySos,
   unreadCpoAlertsCount = 0,
 }: SidebarNavProps) {
   const isLight = theme === 'light'
@@ -97,9 +100,18 @@ export function SidebarNav({
         </p>
 
         {/* ------------------------------------------------------------- */}
-        {/* Action Controls: Critical Alert, Report Crime & CPO Feed      */}
+        {/* Action Controls: Emergency SOS, Critical Alert, Report & CPO  */}
         {/* ------------------------------------------------------------- */}
         <div className="flex flex-col gap-1.5">
+          {onOpenEmergencySos && (
+            <EmergencySosButton
+              onClick={() => {
+                onOpenEmergencySos()
+                onMobileClose()
+              }}
+            />
+          )}
+
           {onOpenCriticalAlert && (
             <button
               type="button"

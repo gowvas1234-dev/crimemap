@@ -1,11 +1,16 @@
 import { CriticalAlertButton } from './CriticalAlertButton'
+import { EmergencySosButton } from './EmergencySosButton'
 
 interface OfficialGovBannerProps {
   onOpenCriticalAlert?: () => void
+  onOpenEmergencySos?: () => void
 }
 
-/** Top Header Banner for Puducherry Police Department and Critical Alert dispatch */
-export function OfficialGovBanner({ onOpenCriticalAlert }: OfficialGovBannerProps = {}) {
+/** Top Header Banner for Puducherry Police Department and Critical Alert / Emergency SOS dispatch */
+export function OfficialGovBanner({
+  onOpenCriticalAlert,
+  onOpenEmergencySos,
+}: OfficialGovBannerProps = {}) {
   return (
     <div className="bg-[#0b1320] text-slate-200 border-b border-slate-800 text-[11px] sm:text-[12px] font-sans">
       <div className="max-w-[1920px] mx-auto px-3 sm:px-4 py-1.5 flex flex-wrap items-center justify-between gap-2.5">
@@ -18,7 +23,10 @@ export function OfficialGovBanner({ onOpenCriticalAlert }: OfficialGovBannerProp
           </span>
         </div>
 
-        <div className="flex items-center gap-2.5 sm:gap-3 shrink-0">
+        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+          {onOpenEmergencySos && (
+            <EmergencySosButton onClick={onOpenEmergencySos} compact />
+          )}
           {onOpenCriticalAlert && (
             <CriticalAlertButton onClick={onOpenCriticalAlert} />
           )}
